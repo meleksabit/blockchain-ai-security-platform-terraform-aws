@@ -10,11 +10,16 @@ output "eks_nodes_sg_id" {
 
 output "vpc_id" {
   description = "The ID of the VPC"
-  value       = aws_vpc.blockchain_vpc.id
+  value       = length(data.aws_vpc.default.id) > 0 ? data.aws_vpc.default.id : aws_vpc.blockchain_vpc[0].id
 }
 
 output "cidr_blocks" {
   description = "The IP address allowed to SSH to the EC2 instances"
   value       = var.allowed_ssh_ip
   sensitive   = true
+}
+
+output "rds_security_group_id" {
+  description = "RDS Security Group ID"
+  value       = aws_security_group.rds_sg.id
 }

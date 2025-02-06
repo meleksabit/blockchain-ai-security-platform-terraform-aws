@@ -28,3 +28,8 @@ variable "eks_instance_type" {
   type        = string
   default     = "t3.micro"
 }
+
+variable "vpc_id" {
+  description = "VPC ID where resources will be deployed"
+  type        = string
+}

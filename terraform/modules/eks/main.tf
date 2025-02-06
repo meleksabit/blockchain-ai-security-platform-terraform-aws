@@ -1,3 +1,8 @@
+# ---------------------------------
+# Create EKS cluster and node group
+# ---------------------------------
+
+# EKS Cluster
 resource "aws_eks_cluster" "blockchain_eks" {
   name     = var.cluster_name
   role_arn = var.eks_role_arn
@@ -11,6 +16,7 @@ resource "aws_eks_cluster" "blockchain_eks" {
   }
 }
 
+# EKS Node Group
 resource "aws_eks_node_group" "blockchain_worker_nodes" {
   cluster_name    = aws_eks_cluster.blockchain_eks.name
   node_group_name = "blockchain-node-group"

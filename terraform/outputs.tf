@@ -1,3 +1,8 @@
+output "vpc_id" {
+  description = "The ID of the VPC"
+  value       = module.network.vpc_id
+}
+
 output "subnet_ids" {
   description = "List of subnet IDs for EKS"
   value       = module.network.subnet_ids

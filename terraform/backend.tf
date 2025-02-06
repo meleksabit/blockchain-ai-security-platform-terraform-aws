@@ -1,3 +1,6 @@
+# -------------------------------------------------------------
+# Define the backend configuration for the Terraform state file
+# -------------------------------------------------------------
 terraform {
   backend "s3" {
     bucket         = "terraform-state-bucket-angel3"     # Bucket name

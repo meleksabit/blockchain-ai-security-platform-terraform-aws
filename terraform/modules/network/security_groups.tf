@@ -1,7 +1,12 @@
+# --------------------------------------------
+# Create security groups for EKS nodes and RDS
+# --------------------------------------------
+
+# Security Group for EKS worker nodes
 resource "aws_security_group" "eks_nodes_sg" {
   name        = "eks-nodes-sg"
   description = "Security group for EKS worker nodes"
-  vpc_id      = aws_vpc.blockchain_vpc.id
+  vpc_id      = aws_vpc.blockchain_vpc[0].id
 
   tags = {
     Name = "eks-nodes-sg"
@@ -46,4 +51,22 @@ resource "aws_security_group_rule" "allow_all_outbound" {
   protocol          = "-1"
   cidr_blocks       = ["0.0.0.0/0"]
   security_group_id = aws_security_group.eks_nodes_sg.id
+}
+
+# Security Group for RDS Database
+resource "aws_security_group" "rds_sg" {
+  name        = "rds-security-group"
+  description = "Allow PostgreSQL access"
+  vpc_id      = aws_vpc.blockchain_vpc[0].id
+
+  ingress {
+    from_port   = 5432
+    to_port     = 5432
+    protocol    = "tcp"
+    cidr_blocks = [var.vpc_cidr] # Only allow VPC traffic
+  }
+
+  tags = {
+    Name = "rds-security-group"
+  }
 }

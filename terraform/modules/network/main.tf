@@ -1,18 +1,19 @@
 
 # VPC for Blockchain Infrastructure
+data "aws_vpc" "default" {
+  default = true
+}
+
 resource "aws_vpc" "blockchain_vpc" {
+  count                = length(data.aws_vpc.default.id) > 0 ? 0 : 1
   cidr_block           = var.vpc_cidr
   enable_dns_support   = true
   enable_dns_hostnames = true
-
-  tags = {
-    Name = "blockchain-vpc"
-  }
 }
 
 # Public Subnet (For Blockchain Nodes)
 resource "aws_subnet" "public_subnet" {
-  vpc_id                  = aws_vpc.blockchain_vpc.id
+  vpc_id                  = aws_vpc.blockchain_vpc[0].id
   cidr_block              = var.public_subnet_cidr
   map_public_ip_on_launch = var.map_public_ip
   availability_zone       = var.availability_zone
@@ -63,6 +64,7 @@ resource "aws_route_table_association" "public_assoc" {
   route_table_id = aws_route_table.public_rt.id
 }
 
+# Security Group for EKS Cluster
 resource "aws_eks_node_group" "blockchain_worker_nodes" {
   cluster_name    = var.cluster_name # Change from aws_eks_cluster.blockchain_eks.name
   node_group_name = "blockchain-node-group"
@@ -78,5 +80,15 @@ resource "aws_eks_node_group" "blockchain_worker_nodes" {
 
   tags = {
     Name = "blockchain-node-group"
+  }
+}
+
+# RDS Subnet Group for Blockchain Database
+resource "aws_db_subnet_group" "blockchain_rds_subnet_group" {
+  name       = "blockchain-rds-subnet-group"
+  subnet_ids = var.subnet_ids
+
+  tags = {
+    Name = "blockchain-rds-subnet-group"
   }
 }
