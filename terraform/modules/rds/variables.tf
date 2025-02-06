@@ -36,6 +36,11 @@ variable "db_engine_version" {
   default     = "15.4"
 }
 
+variable "rds_role_arn" {
+  description = "IAM Role ARN for RDS"
+  type        = string
+}
+
 # -------------------------------
 # Security Group Configuration
 # -------------------------------

@@ -25,7 +25,7 @@ resource "aws_subnet" "public_subnet" {
 
 # Private Subnet (For Security/AI Services)
 resource "aws_subnet" "private_subnet" {
-  vpc_id                  = aws_vpc.blockchain_vpc.id
+  vpc_id                  = aws_vpc.blockchain_vpc[0].id
   cidr_block              = var.private_subnet_cidr
   map_public_ip_on_launch = false
   availability_zone       = var.availability_zone
@@ -37,7 +37,7 @@ resource "aws_subnet" "private_subnet" {
 
 # Internet Gateway for Public Nodes
 resource "aws_internet_gateway" "blockchain_igw" {
-  vpc_id = aws_vpc.blockchain_vpc.id
+  vpc_id = aws_vpc.blockchain_vpc[0].id
 
   tags = {
     Name = "blockchain-internet-gateway"
@@ -71,6 +71,8 @@ resource "aws_eks_node_group" "blockchain_worker_nodes" {
   node_role_arn   = var.eks_role_arn
   subnet_ids      = var.subnet_ids
   instance_types  = [var.eks_instance_type]
+
+  depends_on = [aws_db_subnet_group.blockchain_rds_subnet_group]
 
   scaling_config {
     desired_size = 2

@@ -10,3 +10,8 @@ output "node_group_role_arn" {
 output "ssm_role_arn" {
   value = aws_iam_role.ssm_role.arn
 }
+
+output "rds_role_arn" {
+  description = "IAM Role ARN for RDS"
+  value       = aws_iam_role.rds_role.arn
+}

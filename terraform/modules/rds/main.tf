@@ -31,11 +31,11 @@ resource "aws_db_instance" "blockchain_rds" {
   }
 }
 
-resource "aws_db_subnet_group" "rds_subnet_group" {
-  name       = "rds-subnet-group"
+resource "aws_db_subnet_group" "blockchain_rds_subnet_group" {
+  name       = "blockchain-rds-subnet-group"
   subnet_ids = var.subnet_ids
 
   tags = {
-    Name = "RDS Subnet Group"
+    Name = "blockchain-rds-subnet-group"
   }
 }

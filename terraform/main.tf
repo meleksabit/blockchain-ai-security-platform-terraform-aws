@@ -19,6 +19,10 @@ module "network" {
   aws_region          = var.aws_region
   aws_profile         = var.aws_profile
   vpc_id              = module.network.vpc_id # Uses default VPC if exists, otherwise creates a new one
+  cluster_name        = module.eks.cluster_name
+  eks_role_arn        = module.iam.eks_role_arn
+  subnet_ids          = module.network.private_subnet_ids
+  eks_instance_type   = module.eks.eks_instance_type
 }
 
 # Decide which VPC ID to use: existing or newly created
@@ -47,6 +51,15 @@ module "rds" {
   vpc_id                = local.vpc_id
   rds_security_group_id = module.network.rds_security_group_id
   subnet_ids            = module.network.private_subnets
+  rds_role_arn          = module.iam.rds_role_arn
   db_username           = var.db_username
   db_password           = var.db_password
+}
+
+module "s3" {
+  source = "./modules/s3"
+
+  bucket_name    = var.s3_bucket_name
+  project_suffix = var.project_suffix
+  environment    = var.environment
 }

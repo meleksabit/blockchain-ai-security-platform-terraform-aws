@@ -8,3 +8,9 @@ variable "environment" {
   type        = string
   default     = "prod"
 }
+
+variable "s3_bucket_name" {
+  description = "S3 Bucket name for storing logs and AI models"
+  type        = string
+  default     = "blockchain-ai-logs"
+}
