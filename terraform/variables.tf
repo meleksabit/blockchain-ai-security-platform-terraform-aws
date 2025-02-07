@@ -29,11 +29,21 @@ variable "public_subnet_cidr" {
 }
 
 variable "private_subnet_cidr" {
-  description = "CIDR block for private subnet"
-  default     = "10.0.2.0/25"
+  description = "CIDR blocks for private subnet"
+  type        = list(string)
 }
 
-variable "availability_zone" {
+variable "subnet_ids" {
+  description = "List of subnet IDs"
+  type        = list(string)
+}
+
+variable "private_subnet_ids" {
+  description = "List of private subnets"
+  type        = list(string)
+}
+
+variable "availability_zones" {
   description = "Availability Zone"
   default     = "eu-central-1a"
 }
@@ -54,7 +64,13 @@ variable "allowed_ssh_ip" {
 # -------------------------
 variable "cluster_name" {
   description = "EKS Cluster Name"
+  type        = string
   default     = "blockchain-cluster"
+}
+
+variable "eks_role_arn" {
+  description = "IAM Role ARN for EKS Cluster"
+  type        = string
 }
 
 variable "cluster_version" {
@@ -68,12 +84,17 @@ variable "eks_instance_type" {
   default     = "t3.micro"
 }
 
+variable "eks_subnet_ids" {
+  description = "List of private subnets for EKS"
+  type        = list(string)
+}
+
 # -------------------------------
 # RDS Database Configuration
 # -------------------------------
 
-variable "subnet_ids" {
-  description = "List of private subnet IDs for RDS"
+variable "rds_subnet_ids" {
+  description = "List of private subnets for RDS"
   type        = list(string)
 }
 variable "db_name" {

@@ -83,18 +83,20 @@ resource "aws_iam_role_policy_attachment" "rds_s3_backup" {
 
 # IAM Role for Amazon S3
 resource "aws_iam_role" "s3_role" {
-  name = "s3-access-role"
+  name = "S3AccessRole"
 
   assume_role_policy = jsonencode({
     Version = "2012-10-17"
     Statement = [{
-      Effect = "Allow"
-      Principal = {
-        Service = "ec2.amazonaws.com"
-      }
-      Action = "sts:AssumeRole"
+      Effect    = "Allow"
+      Principal = { Service = "s3.amazonaws.com" }
+      Action    = "sts:AssumeRole"
     }]
   })
+}
+
+output "s3_role_arn" {
+  value = aws_iam_role.s3_role.arn
 }
 
 # Attach Policy for S3 Access

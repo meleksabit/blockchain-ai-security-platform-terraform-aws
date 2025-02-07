@@ -16,7 +16,7 @@ resource "aws_subnet" "public_subnet" {
   vpc_id                  = aws_vpc.blockchain_vpc[0].id
   cidr_block              = var.public_subnet_cidr
   map_public_ip_on_launch = var.map_public_ip
-  availability_zone       = var.availability_zone
+  availability_zone       = var.availability_zones[0]
 
   tags = {
     Name = "public-blockchain-subnet"
@@ -25,13 +25,14 @@ resource "aws_subnet" "public_subnet" {
 
 # Private Subnet (For Security/AI Services)
 resource "aws_subnet" "private_subnet" {
+  count                   = length(var.private_subnet_cidr) # Support multiple subnets
   vpc_id                  = aws_vpc.blockchain_vpc[0].id
-  cidr_block              = var.private_subnet_cidr
+  cidr_block              = var.private_subnet_cidr[count.index]
   map_public_ip_on_launch = false
-  availability_zone       = var.availability_zone
+  availability_zone       = element(var.availability_zones, count.index) # Support multiple AZs
 
   tags = {
-    Name = "private-ai-security-subnet"
+    Name = "private-ai-security-subnet-${count.index}"
   }
 }
 
@@ -46,7 +47,7 @@ resource "aws_internet_gateway" "blockchain_igw" {
 
 # Route Table for Public Subnet
 resource "aws_route_table" "public_rt" {
-  vpc_id = aws_vpc.blockchain_vpc.id
+  vpc_id = aws_vpc.blockchain_vpc[0].id
 
   route {
     cidr_block = "0.0.0.0/0"
@@ -64,15 +65,39 @@ resource "aws_route_table_association" "public_assoc" {
   route_table_id = aws_route_table.public_rt.id
 }
 
+# Subnet Groups for EKS and RDS
+resource "aws_subnet" "eks_subnets" {
+  count = length(var.eks_subnet_ids)
+
+  vpc_id            = var.vpc_id
+  cidr_block        = var.private_subnet_cidr[count.index]
+  availability_zone = var.availability_zones[count.index]
+
+  tags = {
+    Name = "eks-subnet-${count.index}"
+  }
+}
+
+resource "aws_subnet" "rds_subnets" {
+  count = length(var.rds_subnet_ids)
+
+  vpc_id            = var.vpc_id
+  cidr_block        = var.private_subnet_cidr[count.index]
+  availability_zone = var.availability_zones[count.index]
+
+  tags = {
+    Name = "rds-subnet-${count.index}"
+  }
+}
+
+
 # Security Group for EKS Cluster
 resource "aws_eks_node_group" "blockchain_worker_nodes" {
-  cluster_name    = var.cluster_name # Change from aws_eks_cluster.blockchain_eks.name
+  cluster_name    = var.cluster_name
   node_group_name = "blockchain-node-group"
   node_role_arn   = var.eks_role_arn
-  subnet_ids      = var.subnet_ids
+  subnet_ids      = var.eks_subnet_ids
   instance_types  = [var.eks_instance_type]
-
-  depends_on = [aws_db_subnet_group.blockchain_rds_subnet_group]
 
   scaling_config {
     desired_size = 2
@@ -88,7 +113,7 @@ resource "aws_eks_node_group" "blockchain_worker_nodes" {
 # RDS Subnet Group for Blockchain Database
 resource "aws_db_subnet_group" "blockchain_rds_subnet_group" {
   name       = "blockchain-rds-subnet-group"
-  subnet_ids = var.subnet_ids
+  subnet_ids = var.rds_subnet_ids
 
   tags = {
     Name = "blockchain-rds-subnet-group"

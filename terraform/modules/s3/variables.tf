@@ -9,8 +9,7 @@ variable "environment" {
   default     = "prod"
 }
 
-variable "s3_bucket_name" {
-  description = "S3 Bucket name for storing logs and AI models"
+variable "s3_role_arn" {
+  description = "IAM Role ARN for S3 access"
   type        = string
-  default     = "blockchain-ai-logs"
 }

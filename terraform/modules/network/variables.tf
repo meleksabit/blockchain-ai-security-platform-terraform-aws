@@ -27,14 +27,12 @@ variable "public_subnet_cidr" {
 
 variable "private_subnet_cidr" {
   description = "CIDR block for private subnet"
-  type        = string
-  default     = "10.0.2.0/25"
+  type        = list(string)
 }
 
-variable "availability_zone" {
+variable "availability_zones" {
   description = "Availability zone"
-  type        = string
-  default     = "eu-central-1a"
+  type        = list(string)
 }
 
 variable "map_public_ip" {
@@ -74,6 +72,19 @@ variable "subnet_ids" {
 variable "eks_instance_type" {
   description = "Instance type for EKS nodes"
   type        = string
+}
+
+variable "eks_subnet_ids" {
+  description = "List of private subnets for EKS nodes"
+  type        = list(string)
+}
+
+# --------------------------
+# RDS Database Configuration
+# --------------------------
+variable "rds_subnet_ids" {
+  description = "List of private subnets for RDS instance"
+  type        = list(string)
 }
 
 # -------------------------------

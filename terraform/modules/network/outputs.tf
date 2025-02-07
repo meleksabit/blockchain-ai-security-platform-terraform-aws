@@ -1,6 +1,11 @@
 output "subnet_ids" {
   description = "List of subnet IDs"
-  value       = [aws_subnet.public_subnet.id, aws_subnet.private_subnet.id]
+  value       = concat([aws_subnet.public_subnet.id], aws_subnet.private_subnet[*].id)
+}
+
+output "private_subnet_ids" {
+  description = "List of private subnet IDs"
+  value       = aws_subnet.private_subnet[*].id
 }
 
 output "eks_nodes_sg_id" {

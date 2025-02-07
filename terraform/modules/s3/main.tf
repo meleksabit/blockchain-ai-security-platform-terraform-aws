@@ -13,7 +13,7 @@ resource "aws_s3_bucket" "ai_model_storage" {
 }
 
 # S3 Bucket for Logs Storage
-resource "aws_s3_bucket" "logs_storage" {
+resource "aws_s3_bucket" "logs_exports" {
   bucket = "blockchain-logs-${var.project_suffix}"
 
   tags = {
@@ -46,7 +46,7 @@ resource "aws_s3_bucket_policy" "ai_model_storage_policy" {
     Version = "2012-10-17"
     Statement = [{
       Effect    = "Allow"
-      Principal = { AWS = aws_iam_role.s3_role.arn }
+      Principal = { AWS = var.s3_role_arn }
       Action    = "s3:*"
       Resource = [
         aws_s3_bucket.ai_model_storage.arn,
@@ -63,7 +63,7 @@ resource "aws_s3_bucket_policy" "logs_exports_policy" {
     Version = "2012-10-17"
     Statement = [{
       Effect    = "Allow"
-      Principal = { AWS = aws_iam_role.s3_role.arn }
+      Principal = { AWS = var.s3_role_arn }
       Action    = "s3:*"
       Resource = [
         aws_s3_bucket.logs_exports.arn,
