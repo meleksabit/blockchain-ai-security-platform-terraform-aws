@@ -16,7 +16,7 @@ terraform {
     organization = "my-project-ai-powered"
 
     workspaces {
-      name = "my-terraform-setup"
+      name = "blockchain-ai-security-platform-terraform-aws"
     }
   }
 }
