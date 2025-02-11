@@ -47,6 +47,8 @@ vendor/
 *.sum
 
 # Terraform
+secrets.tf
+secrets.tfvars
 .terraform/
 *.tfstate
 *.tfstate.*
