@@ -2,9 +2,12 @@ output "rds_endpoint" {
   value = aws_db_instance.blockchain_rds.endpoint
 }
 
+output "db_name" {
+  value = aws_db_instance.blockchain_rds.name
+}
+
 output "rds_db_username" {
-  value       = local.db_creds["username"]
-  description = "Database username retrieved from Secrets Manager"
+  value = aws_db_instance.blockchain_rds.username
 }
 
 output "rds_security_group_id" {

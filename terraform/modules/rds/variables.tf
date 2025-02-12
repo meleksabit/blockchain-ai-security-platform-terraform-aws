@@ -7,6 +7,17 @@ variable "db_name" {
   default     = "blockchain_db"
 }
 
+variable "rds_db_username" {
+  description = "Username for the RDS database"
+  type        = string
+}
+
+variable "rds_db_password" {
+  description = "Password for the RDS database"
+  type        = string
+  sensitive   = true
+}
+
 variable "db_instance_class" {
   description = "Instance type for RDS database"
   type        = string
