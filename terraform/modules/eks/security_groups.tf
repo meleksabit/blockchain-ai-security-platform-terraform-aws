@@ -1,11 +1,12 @@
 resource "aws_security_group" "eks_api_sg" {
+  name   = "eks-api-sg"
   vpc_id = var.vpc_id
 
   ingress {
     from_port   = 443
     to_port     = 443
     protocol    = "tcp"
-    cidr_blocks = [var.allowed_ssh_ip] # Restrict API access to your IPs
+    cidr_blocks = var.allowed_ssh_ip
   }
 
   egress {

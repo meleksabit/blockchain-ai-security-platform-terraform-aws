@@ -69,4 +69,30 @@ variable "vpc_id" {
 variable "subnet_ids" {
   description = "List of subnet IDs for networking resources"
   type        = list(string)
+  default     = []
+}
+
+#-------------------
+# EKS Configuration
+#-------------------
+variable "eks_subnet_ids" {
+  description = "List of subnet IDs for EKS"
+  type        = list(string)
+  default     = ["subnet-12345678", "subnet-87654321"]
+}
+
+variable "cluster_name" {
+  description = "EKS Cluster Name"
+  type        = string
+}
+
+variable "eks_role_arn" {
+  description = "IAM Role ARN for EKS"
+  type        = string
+  default     = "arn:aws:iam::123456789012:role/dummy-role"
+}
+
+variable "eks_instance_type" {
+  description = "Instance type for EKS nodes"
+  type        = string
 }

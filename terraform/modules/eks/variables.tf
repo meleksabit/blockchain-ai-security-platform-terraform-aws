@@ -11,11 +11,13 @@ variable "cluster_version" {
 variable "subnet_ids" {
   description = "List of subnet IDs for EKS worker nodes"
   type        = list(string)
+  default     = []
 }
 
 variable "eks_role_arn" {
   description = "IAM Role ARN for EKS Cluster"
   type        = string
+  default     = "arn:aws:iam::123456789012:role/dummy-role"
 }
 
 variable "security_group" {
@@ -34,7 +36,7 @@ variable "vpc_id" {
   type        = string
 }
 
-variable "allowed_ips" {
-  description = "List of allowed IPs for API access"
-  type        = string
+variable "allowed_ssh_ip" {
+  description = "List of CIDR blocks allowed for SSH access"
+  type        = list(string)
 }

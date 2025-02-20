@@ -38,7 +38,7 @@ resource "aws_subnet" "private_subnet" {
 
 # Internet Gateway for Public Nodes
 resource "aws_internet_gateway" "blockchain_igw" {
-  vpc_id = aws_vpc.blockchain_vpc[0].id
+  vpc_id = length(aws_vpc.blockchain_vpc) > 0 ? aws_vpc.blockchain_vpc[0].id : ""
 
   tags = {
     Name = "blockchain-internet-gateway"
@@ -47,7 +47,7 @@ resource "aws_internet_gateway" "blockchain_igw" {
 
 # Route Table for Public Subnet
 resource "aws_route_table" "public_rt" {
-  vpc_id = aws_vpc.blockchain_vpc[0].id
+  vpc_id = length(aws_vpc.blockchain_vpc) > 0 ? aws_vpc.blockchain_vpc[0].id : ""
 
   route {
     cidr_block = "0.0.0.0/0"

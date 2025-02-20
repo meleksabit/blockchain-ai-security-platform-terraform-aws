@@ -8,8 +8,8 @@ resource "aws_db_instance" "blockchain_rds" {
   instance_class       = "db.t2.micro"
   identifier           = "blockchain-db"
   storage_encrypted    = true
-  username             = local.db_creds["username"]
-  password             = local.db_creds["password"]
+  username             = var.rds_db_username
+  password             = var.rds_db_password
   db_subnet_group_name = aws_db_subnet_group.blockchain_rds_subnet.name
 
   publicly_accessible       = false
@@ -18,7 +18,7 @@ resource "aws_db_instance" "blockchain_rds" {
   skip_final_snapshot       = false # Create final snapshot when deleting
   final_snapshot_identifier = "blockchain-db-final"
 
-  vpc_security_group_ids = [aws_security_group.rds_sg.id] # Restrict access to RDS SG only
+  vpc_security_group_ids = [var.rds_security_group_id] # Restrict access to RDS SG only
 
   tags = {
     Name = "blockchain-postgres"
@@ -28,7 +28,7 @@ resource "aws_db_instance" "blockchain_rds" {
 # RDS Subnet Group
 resource "aws_db_subnet_group" "blockchain_rds_subnet" {
   name       = "blockchain-rds-subnet-group"
-  subnet_ids = var.rds_subnet_ids # Use the same private subnets
+  subnet_ids = var.rds_subnet_ids
 
   tags = {
     Name = "blockchain-rds-subnet-group"

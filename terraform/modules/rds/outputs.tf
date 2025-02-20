@@ -3,7 +3,7 @@ output "rds_endpoint" {
 }
 
 output "db_name" {
-  value = aws_db_instance.blockchain_rds.name
+  value = aws_db_instance.blockchain_rds.identifier
 }
 
 output "rds_db_username" {

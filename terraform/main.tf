@@ -2,22 +2,17 @@
 # This is the main file that calls the modules
 # ------------------------------------------------
 
-# Fetch existing VPC dynamically (if available)
-data "aws_vpc" "existing" {
-  filter {
-    name   = "tag:Name"
-    values = ["my-custom-vpc"] # Replace with your VPC name
-  }
-}
+resource "aws_vpc" "blockchain_vpc" {
+  cidr_block = var.vpc_cidr
 
-# Use existing VPC if available, else create new
-locals {
-  vpc_id = try(data.aws_vpc.existing.id, module.network.vpc_id)
+  tags = {
+    Name = "blockchain-vpc"
+  }
 }
 
 module "network" {
   source              = "./modules/network"
-  vpc_id              = local.vpc_id
+  vpc_id              = var.vpc_id
   vpc_cidr            = var.vpc_cidr
   public_subnet_cidr  = var.public_subnet_cidr
   private_subnet_cidr = var.private_subnet_cidr
@@ -28,6 +23,10 @@ module "network" {
   aws_profile         = var.aws_profile
   subnet_ids          = module.network.subnet_ids
   rds_subnet_ids      = module.network.private_subnet_ids
+  eks_role_arn        = var.eks_role_arn
+  eks_subnet_ids      = var.eks_subnet_ids
+  cluster_name        = var.cluster_name
+  eks_instance_type   = var.eks_instance_type
 }
 
 module "eks" {
@@ -38,15 +37,17 @@ module "eks" {
   security_group    = module.eks.eks_api_security_group_id
   eks_role_arn      = module.iam.eks_role_arn
   eks_instance_type = var.eks_instance_type
-  vpc_id            = local.vpc_id
-  allowed_ips       = var.allowed_ssh_ip
+  vpc_id            = module.network.vpc_id
+  allowed_ssh_ip    = var.allowed_ssh_ip
 }
 
 module "rds" {
   source                = "./modules/rds"
-  vpc_id                = local.vpc_id
+  vpc_id                = var.vpc_id
   rds_security_group_id = module.network.rds_security_group_id
   rds_subnet_ids        = module.network.private_subnet_ids
+  rds_db_username       = var.rds_db_username
+  rds_db_password       = var.rds_db_password
   rds_role_arn          = module.iam.rds_role_arn
   eks_nodes_sg_id       = module.network.eks_nodes_sg_id
 }

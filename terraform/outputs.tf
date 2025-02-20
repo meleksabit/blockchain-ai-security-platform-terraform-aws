@@ -21,7 +21,7 @@ output "eks_cluster_id" {
 }
 
 output "eks_cluster_endpoint" {
-  value       = module.eks.cluster_endpoint
+  value       = module.eks.eks_cluster_endpoint
   description = "EKS Cluster API Endpoint"
 }
 

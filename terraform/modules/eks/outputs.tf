@@ -1,3 +1,7 @@
+output "cluster_name" {
+  value = aws_eks_cluster.blockchain_eks.id
+}
+
 output "eks_cluster_id" {
   description = "EKS Cluster ID"
   value       = aws_eks_cluster.blockchain_eks.id

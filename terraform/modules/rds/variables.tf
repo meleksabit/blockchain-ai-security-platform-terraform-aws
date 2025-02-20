@@ -33,7 +33,7 @@ variable "db_allocated_storage" {
 variable "db_engine_version" {
   description = "Version of PostgreSQL to use"
   type        = string
-  default     = "15.4"
+  default     = "17.2"
 }
 
 variable "rds_role_arn" {
@@ -78,6 +78,7 @@ variable "vpc_id" {
 variable "eks_nodes_sg_id" {
   description = "Security group ID for EKS worker nodes"
   type        = string
+  default     = ""
 }
 
 variable "rds_subnet_ids" {

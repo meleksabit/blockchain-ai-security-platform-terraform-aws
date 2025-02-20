@@ -42,6 +42,7 @@ variable "private_subnet_cidr" {
 variable "subnet_ids" {
   description = "List of subnet IDs"
   type        = list(string)
+  default     = []
 }
 
 variable "private_subnet_ids" {
@@ -51,7 +52,7 @@ variable "private_subnet_ids" {
 
 variable "availability_zones" {
   description = "Availability Zone"
-  default     = "eu-central-1a"
+  default     = ["eu-central-1a", "eu-central-1b"]
 }
 
 variable "map_public_ip" {
@@ -77,6 +78,7 @@ variable "cluster_name" {
 variable "eks_role_arn" {
   description = "IAM Role ARN for EKS Cluster"
   type        = string
+  default     = "arn:aws:iam::123456789012:role/dummy-role"
 }
 
 variable "cluster_version" {
@@ -93,6 +95,7 @@ variable "eks_instance_type" {
 variable "eks_subnet_ids" {
   description = "List of private subnets for EKS"
   type        = list(string)
+  default     = ["subnet-12345678", "subnet-87654321"]
 }
 
 # -------------------------------
@@ -136,6 +139,7 @@ variable "db_allocated_storage" {
 variable "db_engine_version" {
   description = "Version of PostgreSQL to use"
   type        = string
+  default     = "17.2"
 }
 
 # -------------------------------
@@ -150,6 +154,7 @@ variable "rds_security_group_id" {
 variable "eks_nodes_sg_id" {
   description = "Security group ID for EKS worker nodes"
   type        = string
+  default     = ""
 }
 
 # -------------------------------

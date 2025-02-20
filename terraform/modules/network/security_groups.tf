@@ -4,7 +4,7 @@
 
 # Security Group for API Services (EKS Nodes, Lambda, EC2)
 resource "aws_security_group" "eks_api_sg" {
-  vpc_id = aws_vpc.blockchain_vpc[0].id
+  vpc_id = length(aws_vpc.blockchain_vpc) > 0 ? aws_vpc.blockchain_vpc[0].id : ""
   name   = "eks-api-security-group"
 
   # Allow EKS nodes to talk to RDS (PostgreSQL)
@@ -12,7 +12,7 @@ resource "aws_security_group" "eks_api_sg" {
     from_port       = 5432
     to_port         = 5432
     protocol        = "tcp"
-    security_groups = [data.aws_security_group.rds_sg.id] # Restrict access to RDS SG
+    security_groups = [aws_security_group.eks_api_sg.id] # Restrict access to RDS SG
   }
 
   # Allow only your IP to SSH (if needed)
@@ -20,7 +20,7 @@ resource "aws_security_group" "eks_api_sg" {
     from_port   = 22
     to_port     = 22
     protocol    = "tcp"
-    cidr_blocks = var.allowed_ssh_ip # ✅ Only your IP
+    cidr_blocks = var.allowed_ssh_ip
   }
 
   # Allow outbound traffic (EKS nodes need this for API calls)
@@ -61,7 +61,7 @@ resource "aws_security_group_rule" "allow_node_ssh" {
   from_port         = 22
   to_port           = 22
   protocol          = "tcp"
-  cidr_blocks       = [var.allowed_ssh_ip] # Allow SSH from your IP
+  cidr_blocks       = var.allowed_ssh_ip # Allow SSH from your IP
   security_group_id = aws_security_group.eks_nodes_sg.id
 }
 
@@ -106,18 +106,10 @@ resource "aws_security_group" "rds_sg" {
     from_port       = 5432
     to_port         = 5432
     protocol        = "tcp"
-    security_groups = [data.aws_security_group.eks_api_sg.id] # Only EKS API SG can connect
+    security_groups = [aws_security_group.eks_api_sg.id] # Only EKS API SG can connect
   }
 
   tags = {
     Name = "rds-security-group"
-  }
-}
-
-# Lookup the EKS API SG after it's created
-data "aws_security_group" "eks_api_sg" {
-  filter {
-    name   = "group-name"
-    values = ["eks-api-sg"]
   }
 }
