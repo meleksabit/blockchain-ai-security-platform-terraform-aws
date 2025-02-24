@@ -8,6 +8,18 @@ variable "aws_region" {
   default     = "eu-central-1"
 }
 
+variable "AWS_ACCESS_KEY_ID" {
+  description = "AWS Access Key ID"
+  type        = string
+  default     = ""
+}
+
+variable "AWS_SECRET_ACCESS_KEY" {
+  description = "value of the secret_access_key"
+  type        = string
+  default     = ""
+}
+
 variable "aws_role_arn" {
   description = "value of the role_arn"
   type        = string
