@@ -20,7 +20,6 @@ module "network" {
   map_public_ip       = var.map_public_ip
   allowed_ssh_ip      = var.allowed_ssh_ip
   aws_region          = var.aws_region
-  aws_profile         = var.aws_profile
   subnet_ids          = module.network.subnet_ids
   rds_subnet_ids      = module.network.private_subnet_ids
   eks_role_arn        = var.eks_role_arn

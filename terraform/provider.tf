@@ -2,6 +2,9 @@
 # This file is used to configure the provider for the Terraform configuration.
 # ----------------------------------------------------------------------------
 provider "aws" {
-  region  = var.aws_region  # AWS region
-  profile = var.aws_profile # AWS CLI profile
+  region = var.aws_region # AWS region
+
+  assume_role {
+    role_arn = var.aws_role_arn
+  }
 }

@@ -8,10 +8,10 @@ variable "aws_region" {
   default     = "eu-central-1"
 }
 
-variable "aws_profile" {
-  description = "AWS CLI profile to use for authentication"
+variable "aws_role_arn" {
+  description = "value of the role_arn"
   type        = string
-  default     = "default"
+  default     = "arn:aws:iam::008609291027:role/TerraformCloud"
 }
 
 # ---------------------
