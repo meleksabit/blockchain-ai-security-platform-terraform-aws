@@ -23,7 +23,7 @@ variable "AWS_SECRET_ACCESS_KEY" {
 variable "aws_role_arn" {
   description = "value of the role_arn"
   type        = string
-  default     = "arn:aws:iam::008609291027:role/TerraformCloud"
+  default     = "arn:aws:iam::008609291027:role/TerraformCloudRole"
 }
 
 # ---------------------
@@ -75,7 +75,6 @@ variable "map_public_ip" {
 variable "allowed_ssh_ip" {
   description = "Allowed SSH IP range"
   type        = list(string)
-  sensitive   = true
 }
 
 # -------------------------

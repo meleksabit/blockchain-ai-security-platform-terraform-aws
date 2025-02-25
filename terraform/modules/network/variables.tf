@@ -44,7 +44,6 @@ variable "map_public_ip" {
 variable "allowed_ssh_ip" {
   description = "Allowed IP for SSH access to EC2 instances"
   type        = list(string)
-  sensitive   = true
 }
 
 # -------------------------------

@@ -4,16 +4,9 @@
 
 # Security Group for API Services (EKS Nodes, Lambda, EC2)
 resource "aws_security_group" "eks_api_sg" {
-  vpc_id = length(aws_vpc.blockchain_vpc) > 0 ? aws_vpc.blockchain_vpc[0].id : ""
+  vpc_id = try(aws_vpc.blockchain_vpc[0].id, "")
   name   = "eks-api-security-group"
 
-  # Allow EKS nodes to talk to RDS (PostgreSQL)
-  ingress {
-    from_port       = 5432
-    to_port         = 5432
-    protocol        = "tcp"
-    security_groups = [aws_security_group.eks_api_sg.id] # Restrict access to RDS SG
-  }
 
   # Allow only your IP to SSH (if needed)
   ingress {
@@ -36,19 +29,11 @@ resource "aws_security_group" "eks_api_sg" {
   }
 }
 
-# Lookup the RDS SG after it's created
-data "aws_security_group" "rds_sg" {
-  filter {
-    name   = "group-name"
-    values = ["rds-sg"]
-  }
-}
-
 # Security Group for EKS worker nodes
 resource "aws_security_group" "eks_nodes_sg" {
   name        = "eks-nodes-sg"
   description = "Security group for EKS worker nodes"
-  vpc_id      = aws_vpc.blockchain_vpc[0].id
+  vpc_id      = try(aws_vpc.blockchain_vpc[0].id, "")
 
   tags = {
     Name = "eks-nodes-sg"
@@ -97,19 +82,31 @@ resource "aws_security_group_rule" "allow_all_outbound" {
 
 # Security Group for RDS PostgreSQL
 resource "aws_security_group" "rds_sg" {
-  vpc_id      = aws_vpc.blockchain_vpc[0].id
+  vpc_id      = try(aws_vpc.blockchain_vpc[0].id, "")
   name        = "rds-security-group"
   description = "Security group for RDS PostgreSQL"
-
-  # Allow only EKS API services to access RDS
-  ingress {
-    from_port       = 5432
-    to_port         = 5432
-    protocol        = "tcp"
-    security_groups = [aws_security_group.eks_api_sg.id] # Only EKS API SG can connect
-  }
 
   tags = {
     Name = "rds-security-group"
   }
+}
+
+# Allow EKS API SG to access RDS SG (Port 5432)
+resource "aws_security_group_rule" "eks_to_rds" {
+  type                     = "ingress"
+  from_port                = 5432
+  to_port                  = 5432
+  protocol                 = "tcp"
+  source_security_group_id = aws_security_group.eks_api_sg.id
+  security_group_id        = aws_security_group.rds_sg.id
+}
+
+# Allow RDS SG to access EKS API SG (Port 443)
+resource "aws_security_group_rule" "rds_to_eks" {
+  type                     = "ingress"
+  from_port                = 443
+  to_port                  = 443
+  protocol                 = "tcp"
+  source_security_group_id = aws_security_group.rds_sg.id
+  security_group_id        = aws_security_group.eks_api_sg.id
 }

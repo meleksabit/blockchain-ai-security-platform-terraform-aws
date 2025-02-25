@@ -55,4 +55,5 @@ output "rds_endpoint" {
 output "rds_db_username" {
   value       = module.rds.rds_db_username
   description = "RDS database username retrieved from AWS Secrets Manager"
+  sensitive   = true
 }

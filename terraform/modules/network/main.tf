@@ -1,11 +1,7 @@
 
 # VPC for Blockchain Infrastructure
-data "aws_vpc" "default" {
-  default = true
-}
-
 resource "aws_vpc" "blockchain_vpc" {
-  count                = length(data.aws_vpc.default.id) > 0 ? 0 : 1
+  count                = 1
   cidr_block           = var.vpc_cidr
   enable_dns_support   = true
   enable_dns_hostnames = true
@@ -13,7 +9,7 @@ resource "aws_vpc" "blockchain_vpc" {
 
 # Public Subnet (For Blockchain Nodes)
 resource "aws_subnet" "public_subnet" {
-  vpc_id                  = aws_vpc.blockchain_vpc[0].id
+  vpc_id                  = try(aws_vpc.blockchain_vpc[0].id, "")
   cidr_block              = var.public_subnet_cidr
   map_public_ip_on_launch = var.map_public_ip
   availability_zone       = var.availability_zones[0]
@@ -26,7 +22,7 @@ resource "aws_subnet" "public_subnet" {
 # Private Subnet (For Security/AI Services)
 resource "aws_subnet" "private_subnet" {
   count                   = length(var.private_subnet_cidr) # Support multiple subnets
-  vpc_id                  = aws_vpc.blockchain_vpc[0].id
+  vpc_id                  = try(aws_vpc.blockchain_vpc[0].id, "")
   cidr_block              = var.private_subnet_cidr[count.index]
   map_public_ip_on_launch = false
   availability_zone       = element(var.availability_zones, count.index) # Support multiple AZs
@@ -38,7 +34,7 @@ resource "aws_subnet" "private_subnet" {
 
 # Internet Gateway for Public Nodes
 resource "aws_internet_gateway" "blockchain_igw" {
-  vpc_id = length(aws_vpc.blockchain_vpc) > 0 ? aws_vpc.blockchain_vpc[0].id : ""
+  vpc_id = try(aws_vpc.blockchain_vpc[0].id, "")
 
   tags = {
     Name = "blockchain-internet-gateway"
@@ -47,7 +43,7 @@ resource "aws_internet_gateway" "blockchain_igw" {
 
 # Route Table for Public Subnet
 resource "aws_route_table" "public_rt" {
-  vpc_id = length(aws_vpc.blockchain_vpc) > 0 ? aws_vpc.blockchain_vpc[0].id : ""
+  vpc_id = try(aws_vpc.blockchain_vpc[0].id, "")
 
   route {
     cidr_block = "0.0.0.0/0"
