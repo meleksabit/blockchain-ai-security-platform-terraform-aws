@@ -57,8 +57,7 @@ jobs:
           FIX_PYTHON_PYINK: true
           FIX_MARKDOWN: true
           FIX_TERRAFORM_FMT: true
-          FIX_TERRAFORM_TERRASCAN: true
-
+          
       - name: Commit and push linting fixes
         if: github.event_name == 'pull_request' && github.ref_name != github.event.repository.default_branch
         uses: stefanzweifel/git-auto-commit-action@v5
