@@ -22,15 +22,7 @@ jobs:
         uses: super-linter/super-linter@v7.3.0
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          VALIDATE_MARKDOWN: true
-          VALIDATE_TERRAFORM_FMT: true
-          VALIDATE_TERRAFORM_TERRASCAN: true
-          VALIDATE_TERRAFORM_TFLINT: true 
-          VALIDATE_PYTHON_BLACK: true
-          VALIDATE_PYTHON_PYLINT: true
-          VALIDATE_PYTHON_ISORT: true
-          VALIDATE_PYTHON_MYPY: true
-          VALIDATE_PYTHON_BANDIT: true
+          VALIDATE_ALL_CODEBASE: true
           
   # ✅ Step 2: Run Super-Linter in fix mode and commit changes
   fix-lint-issues:
