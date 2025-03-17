@@ -62,3 +62,8 @@ module "s3" {
   environment    = var.environment
   s3_role_arn    = module.iam.s3_role_arn
 }
+
+module "vault" {
+  source         = "./modules/vault"
+  infura_api_key = var.infura_api_key
+}

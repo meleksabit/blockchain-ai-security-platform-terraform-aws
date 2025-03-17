@@ -1,0 +1,20 @@
+services:
+  ai-agent:
+    build:
+      context: ./ai-agent
+      dockerfile: Dockerfile
+    image: ${DOCKER_USERNAME}/ai-agent:${TAG}
+    ports:
+      - "8000:8000"  # Exposes FastAPI API
+    user: "1000:1000"  # Run as non-root user
+    environment:
+      - AWS_ACCESS_KEY_ID=${AWS_ACCESS_KEY_ID}
+      - AWS_SECRET_ACCESS_KEY=${AWS_SECRET_ACCESS_KEY}
+      - AWS_REGION=eu-central-1
+    restart: unless-stopped
+    networks:
+      - ai-network
+
+networks:
+  ai-network:
+    driver: bridge
