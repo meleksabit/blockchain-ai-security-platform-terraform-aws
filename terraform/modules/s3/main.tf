@@ -81,6 +81,10 @@ resource "aws_s3_bucket_lifecycle_configuration" "ai_model_storage_lifecycle" {
     id     = "delete-old-models"
     status = "Enabled"
 
+    filter {
+      prefix = "" # Applies to all objects in the bucket
+    }
+
     expiration {
       days = 180 # Delete objects after 6 months
     }
@@ -94,6 +98,10 @@ resource "aws_s3_bucket_lifecycle_configuration" "logs_exports_lifecycle" {
   rule {
     id     = "delete-old-logs"
     status = "Enabled"
+
+    filter {
+      prefix = "" # Applies to all objects in the bucket
+    }
 
     expiration {
       days = 90 # Delete logs after 3 months

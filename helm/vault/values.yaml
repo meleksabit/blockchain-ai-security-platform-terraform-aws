@@ -1,0 +1,39 @@
+replicaCount: 1
+image:
+  repository: hashicorp/vault
+  tag: "1.19.0"
+  pullPolicy: IfNotPresent
+service:
+  type: ClusterIP
+  port: 8200
+env:
+  - name: VAULT_DEV_ROOT_TOKEN_ID
+    value: "myroot"
+  - name: VAULT_DEV_LISTEN_ADDRESS
+    value: "0.0.0.0:8200"
+resources:
+  limits:
+    cpu: "0.5"
+    memory: "512Mi"
+  requests:
+    cpu: "0.2"
+    memory: "256Mi"
+serviceAccount:
+  create: true
+  name: "vault-sa"
+probes:
+  liveness:
+    enabled: true
+    path: "/v1/sys/health"
+    initialDelaySeconds: 10
+    periodSeconds: 10
+    timeoutSeconds: 2
+    failureThreshold: 3
+  readiness:
+    enabled: true
+    path: "/v1/sys/health"
+    initialDelaySeconds: 5
+    periodSeconds: 10
+    timeoutSeconds: 2
+    failureThreshold: 3
+    

@@ -2,6 +2,7 @@ import logging
 import os
 import re
 import hvac
+import subprocess
 from fastapi import FastAPI, HTTPException
 from pydantic import BaseModel
 from transformers import AutoTokenizer, AutoModelForSequenceClassification
@@ -78,6 +79,14 @@ class AIModel:
         else:
             return f"Normal Transaction (Score: {anomaly_score:.2f})"
 
+# Ensure hf_xet is installed
+def ensure_hf_xet():
+    try:
+        import hf_xet
+        logger.info("hf_xet package is already installed")
+    except ImportError:
+        logger.warning("hf_xet not installed in image, expected pre-installation. Falling back to HTTP download.")
+
 # Health endpoint
 @app.get("/health")
 async def health_check():
@@ -99,7 +108,8 @@ async def health_check():
 # Vault client setup
 @lru_cache(maxsize=1)
 def get_vault_client():
-    client = hvac.Client(url="http://vault.vault.svc.cluster.local:8200")
+    vault_addr = os.environ.get("VAULT_ADDR", "http://vault:8200")
+    client = hvac.Client(url=vault_addr)
     client.token = os.environ.get("VAULT_AUTH_TOKEN")
     if not client.is_authenticated():
         raise Exception("Vault authentication failed")
@@ -116,7 +126,7 @@ def get_infura_key():
         if api_key.startswith("https://"):
             logger.warning("Infura key from Vault appears to be a full URL - extracting key")
             api_key = api_key.split("/")[-1]
-        os.environ["INFURA_API_KEY"] = api_key  # For redaction in logs
+        os.environ["INFURA_API_KEY"] = api_key
         logger.info("Infura key retrieved from Vault")
         return api_key
     except Exception as e:
@@ -209,6 +219,7 @@ async def analyze_transaction(tx: Transaction):
 @app.on_event("startup")
 async def startup_event():
     try:
+        ensure_hf_xet()  # Ensure hf_xet is installed
         web3 = connect_web3()
         ai_model = AIModel.get_instance()
         logger.info("Starting blockchain polling and historical fetch in background")
@@ -240,4 +251,3 @@ async def poll_blockchain(web3):
 if __name__ == "__main__":
     import uvicorn
     uvicorn.run(app, host="0.0.0.0", port=8000)
-    

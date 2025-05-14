@@ -12,3 +12,4 @@ gunicorn==23.0.0
 hvac==2.3.0
 psycopg2-binary==2.9.10
 pydantic==2.10.6
+huggingface-hub[hf_xet]

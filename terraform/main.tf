@@ -67,3 +67,14 @@ module "vault" {
   source         = "./modules/vault"
   infura_api_key = var.infura_api_key
 }
+
+module "ecr" {
+  source = "./modules/ecr"
+}
+
+module "alb" {
+  source            = "./modules/alb"
+  vpc_id            = module.network.vpc_id
+  public_subnet_ids = module.network.subnet_ids
+  aws_region        = var.aws_region
+}

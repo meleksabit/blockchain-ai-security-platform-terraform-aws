@@ -1,0 +1,60 @@
+replicaCount: 1
+
+image:
+  repository: dashboard
+  tag: "latest"
+  pullPolicy: IfNotPresent
+
+service:
+  type: LoadBalancer
+  port: 8083
+
+env:
+  - name: PORT
+    value: "8083"
+  - name: BLOCKCHAIN_URL
+    value: "http://blockchain-monitor-svc:8081"
+  - name: ANOMALY_URL
+    value: "http://anomaly-detector-svc:8082"
+
+resources:
+  limits:
+    cpu: "0.5"
+    memory: "512Mi"
+  requests:
+    cpu: "0.2"
+    memory: "256Mi"
+
+autoscaling:
+  enabled: true
+  minReplicas: 1
+  maxReplicas: 3
+  targetCPUUtilizationPercentage: 80
+
+serviceAccount:
+  create: true
+  name: "dashboard-sa"
+
+probes:
+  liveness:
+    enabled: true
+    path: "/dashboard"
+    initialDelaySeconds: 10
+    periodSeconds: 10
+    timeoutSeconds: 2
+    failureThreshold: 3
+  readiness:
+    enabled: true
+    path: "/dashboard"
+    initialDelaySeconds: 5
+    periodSeconds: 10
+    timeoutSeconds: 2
+    failureThreshold: 3
+  startup:
+    enabled: true
+    path: "/dashboard"
+    initialDelaySeconds: 5
+    periodSeconds: 5
+    timeoutSeconds: 2
+    failureThreshold: 30
+    
