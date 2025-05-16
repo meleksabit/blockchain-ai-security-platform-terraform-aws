@@ -103,7 +103,7 @@ async def health_check():
         raise e
     except Exception as e:
         logger.error(f"Health check failed: {e}")
-        return {"status": "unhealthy", "error": str(e)}
+        return {"status": "unhealthy", "error": "Health check failed due to an internal error"}
 
 # Vault client setup
 @lru_cache(maxsize=1)
@@ -251,3 +251,4 @@ async def poll_blockchain(web3):
 if __name__ == "__main__":
     import uvicorn
     uvicorn.run(app, host="0.0.0.0", port=8000)
+    
