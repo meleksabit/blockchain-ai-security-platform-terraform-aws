@@ -580,3 +580,5 @@ Infrastructure is managed in the `terraform/` folder:
 > - **Cost Management**: Monitor AWS resource usage (e.g., EKS Spot instances, RDS, S3) to optimize costs, especially when using Terraform Cloud and Jenkins pipelines
 
 For issues, check Terraform Cloud logs or review `kubectl` outputs.
+
+[:arrow_up:](#top)
