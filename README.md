@@ -574,6 +574,9 @@ Infrastructure is managed in the `terraform/` folder:
 > - **Ethereum Testnet**: Uses Infura for blockchain data.
 > - **CI/CD**: Jenkins pipeline builds/pushes images to ECR and deploys to EKS.
 > - **Health Checks**: Ensure probes are configured per service.
-> - **Region**: `eu-central-1`.
+> - **Region**: `eu-central-1` (Frankfurt) is the default region for all AWS resources (EKS, RDS, S3, Secrets Manager). To use a different region, update AWS_DEFAULT_REGION in Terraform Cloud variables or terraform/backend.tf. Ensure consistency across resources to avoid cross-region latency or costs.
+> - **Secret Rotation**: Regularly rotate sensitive secrets (e.g., Infura API key, RDS credentials) in Vault or AWS Secrets Manager to maintain security, and update dependent services accordingly.
+> - **Monitoring**: Configure monitoring tools (e.g., AWS CloudWatch, Prometheus) to track EKS cluster metrics and application health, leveraging logs in S3 (blockchain-logs-prod).
+> - **Cost Management**: Monitor AWS resource usage (e.g., EKS Spot instances, RDS, S3) to optimize costs, especially when using Terraform Cloud and Jenkins pipelines
 
 For issues, check Terraform Cloud logs or review `kubectl` outputs.
