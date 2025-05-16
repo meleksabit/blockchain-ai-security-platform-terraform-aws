@@ -1,0 +1,7 @@
+apiVersion: v2
+name: ai-agent
+version: 0.1.0
+description: AI-powered blockchain transaction monitor
+maintainers:
+  - name: Melek Sabit
+    email: melek.sabit@outlook.com

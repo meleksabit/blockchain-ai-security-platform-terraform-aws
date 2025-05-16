@@ -7,7 +7,7 @@ terraform {
   required_providers {
     aws = {
       source  = "hashicorp/aws"
-      version = "~> 5.0" # Lock AWS provider version
+      version = "~> 5.97.0" # Lock AWS provider version
     }
   }
 }

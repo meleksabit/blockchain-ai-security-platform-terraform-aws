@@ -1,0 +1,34 @@
+# Patterns to ignore when building Helm packages.
+# Supports shell glob matching, relative path matching, and negation (!).
+# One pattern per line.
+
+# macOS system files
+.DS_Store
+
+# Common VCS dirs (if you’re managing Helm in Git)
+.git/
+.gitignore
+.bzr/
+.bzrignore
+.hg/
+.hgignore
+.svn/
+
+# Common backup and temp files
+*.swp
+*.bak
+*.tmp
+*.orig
+*~
+
+# Various IDEs and editors
+.project
+.idea/
+*.tmproj
+.vscode/
+
+# Local testing or sensitive files
+secrets/
+*.key
+*.pem
+values-prod.yaml # Keep production-specific values out of the package

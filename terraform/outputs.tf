@@ -57,3 +57,11 @@ output "rds_db_username" {
   description = "RDS database username retrieved from AWS Secrets Manager"
   sensitive   = true
 }
+
+output "alb_dns_name" {
+  value = module.alb.alb_dns_name
+}
+
+output "ecr_repository_urls" {
+  value = module.ecr.repository_urls
+}

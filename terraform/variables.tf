@@ -187,3 +187,13 @@ variable "environment" {
   type        = string
   default     = "prod"
 }
+
+# --------------
+# Infura API Key
+# --------------
+
+variable "infura_api_key" {
+  description = "Infura API key"
+  type        = string
+  sensitive   = true
+}
