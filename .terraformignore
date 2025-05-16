@@ -1,0 +1,74 @@
+# Terraform state and backup files
+*.tfstate
+*.tfstate.backup
+*.tfplan
+
+# Terraform internal directories
+.terraform/
+
+# Logs and debug artifacts
+*.log
+crash.log
+*.out
+*.err
+
+# AWS credentials and sensitive files
+.aws/
+*.pem
+*.key
+*.crt
+*.env
+.env.*
+credentials.json
+secrets/
+**/credentials.tfvars
+
+# Python artifacts
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+*.egg-info/
+*.dist-info/
+*.ipynb_checkpoints/
+*.sqlite3
+*.db
+.venv/
+venv/
+env/
+
+# Docker build cache and local overrides
+Dockerfile.*
+docker-compose.override.yml
+*.tar
+*.img
+
+# Node-related (if present)
+node_modules/
+npm-debug.log
+yarn-error.log
+
+# Editor/OS/CI-related
+.idea/
+.vscode/
+*.swp
+*.swo
+*.bak
+*.tmp
+.DS_Store
+Thumbs.db
+
+# Git
+.git/
+.gitignore
+.gitattributes
+
+# Tests & coverage (optional)
+coverage/
+tests/__pycache__/
+test-results/
+
+# Model cache (if using Hugging Face Transformers)
+model_cache/
+transformers_cache/
+huggingface/

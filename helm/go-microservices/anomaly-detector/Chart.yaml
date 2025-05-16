@@ -1,0 +1,10 @@
+apiVersion: v2
+name: anomaly-detector
+version: 0.1.0
+appVersion: "1.0"
+description: Detects anomalies in blockchain transactions
+type: application
+maintainers:
+  - name: Melek Sabit
+    email: melek.sabit@outlook.com
+    
