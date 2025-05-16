@@ -7,18 +7,18 @@
 - [Prerequisites](#prerequisites)
 - [Project Structure: Directory Overview](#%EF%B8%8Fproject-structure-directory-overview)
 - [Setup](#setup)
-  - [1. Configure Terraform Cloud](#configure-terraform-cloud)
+  - [Configure Terraform Cloud](#configure-terraform-cloud)
   - [Configure Vault](#configure-vault)
     - [Option 1: Docker Compose (Local)](#option-1-docker-compose-local)
     - [Option 2: Helm (Local or EKS)](#option-2-helm-local-or-eks)
     - [Option 3: AWS Secrets Manager](#option-3-aws-secrets-manager)
   - [IAM Role (TerraformCloudRole)](#iam-role-terraformcloudrole)
   - [Optimize Uploads](#optimize-uploads)
-- [Deploy Infrastructure and Application](#deploy-infrastructure-and-application)
+- [Deploy Infrastructure and Application](#%EF%B8%8Fdeploy-infrastructure-and-application)
   - [Local Testing (Kubernetes)](#local-testing-kubernetes)
-  - [AWS Deployment (Terraform Cloud)](#aws-deployment-terraform-cloud)
-- [Infrastructure Details](#infrastructure-details)
-- [Troubleshooting](#troubleshooting)
+  - [AWS Deployment (Terraform Cloud)](#%EF%B8%8Faws-deployment-terraform-cloud)
+- [Infrastructure Details](#%EF%B8%8Finfrastructure-details)
+- [Troubleshooting](#%EF%B8%8Ftroubleshooting)
 
 ## 💡🚀Implementation Overview
 
