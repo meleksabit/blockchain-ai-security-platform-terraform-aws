@@ -23,7 +23,6 @@ variable "AWS_SECRET_ACCESS_KEY" {
 variable "aws_role_arn" {
   description = "value of the role_arn"
   type        = string
-  default     = "arn:aws:iam::008609291027:role/TerraformCloudRole"
 }
 
 # ---------------------
