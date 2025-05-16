@@ -4,7 +4,9 @@ import (
     "context"
     "fmt"
     "log"
+    "math"
     "math/big"
+    "errors"
     "net/http"
     "os"
     "strconv"
@@ -150,6 +152,9 @@ func (s *BlockchainService) GetLatestBlock(ctx context.Context) (uint64, error) 
 }
 
 func (s *BlockchainService) GetTransactionCount(ctx context.Context, blockNumber uint64) (uint, error) {
+    if blockNumber > uint64(math.MaxInt64) {
+        return 0, errors.New("block number exceeds maximum int64 value")
+    }
     block, err := s.client.BlockByNumber(ctx, big.NewInt(int64(blockNumber)))
     if err != nil {
         return 0, err
