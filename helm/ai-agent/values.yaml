@@ -1,0 +1,14 @@
+replicaCount: 2
+image:
+  repository: "ai-agent"
+service:
+  type: LoadBalancer
+  port: 80
+env:
+  - name: NETWORK
+    value: "local"    # Set to 'sepolia' or 'ropsten' for production
+  - name: VAULT_AUTH_TOKEN
+    valueFrom:
+      secretKeyRef:
+        name: vault-token
+        key: token

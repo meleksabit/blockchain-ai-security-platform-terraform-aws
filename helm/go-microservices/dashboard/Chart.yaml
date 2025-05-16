@@ -1,0 +1,9 @@
+apiVersion: v2
+name: dashboard
+version: 0.1.0
+appVersion: "1.0"
+description: Displays blockchain transaction data
+type: application
+maintainers:
+  - name: Melek Sabit
+    email: melek.sabit@outlook.com

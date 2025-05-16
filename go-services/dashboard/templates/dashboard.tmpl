@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Blockchain Dashboard</title>
+    <style>
+        .highlight { color: red; font-weight: bold; }
+    </style>
+</head>
+<body>
+    <h1>Blockchain Dashboard</h1>
+    <p>Latest Block: {{.LatestBlock}}</p>
+    <p>Transaction Count: {{.TransactionCount}}</p>
+    <p class="highlight">Anomaly: {{.Anomaly}}</p>
+    <p>Last Updated: {{.LastUpdated}}</p>
+    {{if .Error}}
+    <p class="highlight">Error: {{.Error}}</p>
+    {{end}}
+</body>
+</html>

@@ -1,0 +1,76 @@
+services:
+  vault:
+    image: hashicorp/vault:1.19.0
+    container_name: vault
+    ports:
+      - "8200:8200"
+    environment:
+      - VAULT_DEV_ROOT_TOKEN_ID=myroot
+      - VAULT_DEV_LISTEN_ADDRESS=0.0.0.0:8200
+    command: server -dev
+    cap_add:
+      - IPC_LOCK
+    healthcheck:
+      test: ["CMD", "vault", "status", "-address=http://localhost:8200"]
+      interval: 5s
+      timeout: 2s
+      retries: 10
+
+  blockchain-monitor:
+    build:
+      context: ./go-services/blockchain-monitor
+      dockerfile: Dockerfile
+    container_name: blockchain-monitor
+    ports:
+      - "8081:8081"
+    environment:
+      - PORT=8081
+      - VAULT_ADDR=http://vault:8200
+      - VAULT_TOKEN=myroot
+    depends_on:
+      vault:
+        condition: service_healthy
+    command: "sh -c 'sleep 15 && ./blockchain-monitor'"
+  anomaly-detector:
+    build:
+      context: ./go-services/anomaly-detector
+      dockerfile: Dockerfile
+    container_name: anomaly-detector
+    ports:
+      - "8082:8082"
+    environment:
+      - PORT=8082
+      - VAULT_ADDR=http://vault:8200
+      - VAULT_TOKEN=myroot
+    depends_on:
+      - vault
+
+  dashboard:
+    build:
+      context: ./go-services/dashboard
+      dockerfile: Dockerfile
+    container_name: dashboard
+    ports:
+      - "8083:8083"
+    environment:
+      - PORT=8083
+      - VAULT_ADDR=http://vault:8200
+      - VAULT_TOKEN=myroot
+    depends_on:
+      - vault
+
+  ai-agent:
+    build:
+      context: ./ai-agent
+      dockerfile: Dockerfile
+    container_name: ai-agent
+    ports:
+      - "8000:8000"
+    environment:
+      - PORT=8000
+      - VAULT_ADDR=http://vault:8200
+      - VAULT_AUTH_TOKEN=myroot
+    depends_on:
+      vault:
+        condition: service_healthy
+    command: "sh -c 'sleep 15 && gunicorn -k uvicorn.workers.UvicornWorker ai_agent:app'"
