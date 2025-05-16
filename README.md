@@ -5,9 +5,9 @@
 ## Table of Contents
 - [Implementation Overview](#implementation-overview)
 - [Prerequisites](#prerequisites)
-- [Project Structure: Directory Overview](#project-structure-directory-overview)
+- [Project Structure: Directory Overview](#%EF%B8%8Fproject-structure-directory-overview)
 - [Setup](#setup)
-  - [Configure Terraform Cloud](#configure-terraform-cloud)
+  - [Configure Terraform Cloud](#1.configure-terraform-cloud)
   - [Configure Vault](#configure-vault)
     - [Option 1: Docker Compose (Local)](#option-1-docker-compose-local)
     - [Option 2: Helm (Local or EKS)](#option-2-helm-local-or-eks)
