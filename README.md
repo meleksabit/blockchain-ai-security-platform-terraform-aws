@@ -1,4 +1,4 @@
-# ₿lockchain AI Security Platform
+# $\color{Goldenrod}{₿lockchain\ AI\ Security\ Platform\}$
 
 ### An ֎🇦🇮-powered security platform for detecting anomalies in blockchain transactions, built with Terraform <img width="50" src="https://raw.githubusercontent.com/marwin1991/profile-technology-icons/refs/heads/main/icons/terraform.png" alt="Terraform" title="Terraform"/> for AWS <img width="50" src="https://raw.githubusercontent.com/marwin1991/profile-technology-icons/refs/heads/main/icons/aws.png" alt="AWS" title="AWS"/> infrastructure, Helm <img height="32" width="32" src="https://cdn.simpleicons.org/helm" /> for Kubernetes <img height="32" width="32" src="https://cdn.simpleicons.org/kubernetes" /> deployments, and a CI/CD <img height="32" width="32" src="https://cdn.simpleicons.org/jenkins" /> pipeline. The platform integrates AI agents <img height="32" width="32" src="https://cdn.simpleicons.org/openai" />, Go <img width="50" src="https://raw.githubusercontent.com/marwin1991/profile-technology-icons/refs/heads/main/icons/go.png" alt="Go" title="Go"/> microservices, RDS <img height="32" width="32" src="https://cdn.simpleicons.org/amazonrds" />, and containerized deployments for a robust DevSecOps solution.
 
@@ -545,7 +545,7 @@ Infrastructure is managed in the `terraform/` folder:
   - RDS instance for transaction metadata, with IAM role for monitoring.
   - Vault service for secret management, with infrastructure provisioned by Terraform and deployed via Helm.
   - VPC with public/private subnets.
-- Deploy via Terraform Cloud (see [AWS Deployment (Terraform Cloud)](#aws-deployment-terraform-cloud)).
+- Deploy via Terraform Cloud (see [AWS Deployment (Terraform Cloud)](#%EF%B8%8Faws-deployment-terraform-cloud)).
 
 ## ⚠️🩺🔧Troubleshooting
 - **Credentials Error**:
