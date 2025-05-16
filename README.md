@@ -1,6 +1,6 @@
-# Blockchain AI Security Platform
+# ₿lockchain AI Security Platform
 
-### An ֎🇦🇮-powered security platform for detecting anomalies in blockchain ₿ transactions, built with Terraform <img width="50" src="https://raw.githubusercontent.com/marwin1991/profile-technology-icons/refs/heads/main/icons/terraform.png" alt="Terraform" title="Terraform"/> for AWS <img width="50" src="https://raw.githubusercontent.com/marwin1991/profile-technology-icons/refs/heads/main/icons/aws.png" alt="AWS" title="AWS"/> infrastructure, Helm <img height="32" width="32" src="https://cdn.simpleicons.org/helm" /> for Kubernetes <img height="32" width="32" src="https://cdn.simpleicons.org/kubernetes" /> deployments, and a CI/CD <img height="32" width="32" src="https://cdn.simpleicons.org/jenkins" /> pipeline. The platform integrates AI agents <img height="32" width="32" src="https://cdn.simpleicons.org/openai" />, Go <img width="50" src="https://raw.githubusercontent.com/marwin1991/profile-technology-icons/refs/heads/main/icons/go.png" alt="Go" title="Go"/> microservices, RDS <img height="32" width="32" src="https://cdn.simpleicons.org/amazonrds" />, and containerized deployments for a robust DevSecOps solution.
+### An ֎🇦🇮-powered security platform for detecting anomalies in blockchain transactions, built with Terraform <img width="50" src="https://raw.githubusercontent.com/marwin1991/profile-technology-icons/refs/heads/main/icons/terraform.png" alt="Terraform" title="Terraform"/> for AWS <img width="50" src="https://raw.githubusercontent.com/marwin1991/profile-technology-icons/refs/heads/main/icons/aws.png" alt="AWS" title="AWS"/> infrastructure, Helm <img height="32" width="32" src="https://cdn.simpleicons.org/helm" /> for Kubernetes <img height="32" width="32" src="https://cdn.simpleicons.org/kubernetes" /> deployments, and a CI/CD <img height="32" width="32" src="https://cdn.simpleicons.org/jenkins" /> pipeline. The platform integrates AI agents <img height="32" width="32" src="https://cdn.simpleicons.org/openai" />, Go <img width="50" src="https://raw.githubusercontent.com/marwin1991/profile-technology-icons/refs/heads/main/icons/go.png" alt="Go" title="Go"/> microservices, RDS <img height="32" width="32" src="https://cdn.simpleicons.org/amazonrds" />, and containerized deployments for a robust DevSecOps solution.
 
 ## Table of Contents
 - [Implementation Overview](#implementation-overview)
@@ -9,6 +9,9 @@
 - [Setup](#setup)
   - [Configure Terraform Cloud](#configure-terraform-cloud)
   - [Configure Vault](#configure-vault)
+    - [Option 1: Docker Compose (Local)](#option-1-docker-compose-local)
+    - [Option 2: Helm (Local or EKS)](#option-2-helm-local-or-eks)
+    - [Option 3: AWS Secrets Manager](#option-3-aws-secrets-manager)
   - [IAM Role (TerraformCloudRole)](#iam-role-terraformcloudrole)
   - [Optimize Uploads](#optimize-uploads)
 - [Deploy Infrastructure and Application](#deploy-infrastructure-and-application)
@@ -16,10 +19,6 @@
   - [AWS Deployment (Terraform Cloud)](#aws-deployment-terraform-cloud)
 - [Infrastructure Details](#infrastructure-details)
 - [Troubleshooting](#troubleshooting)
-  - [Credentials Error](#credentials-error)
-  - [Vault Secrets](#vault-secrets)
-  - [Helm Deployment](#helm-deployment)
-  - [RDS Issues](#rds-issues)
 
 ## 💡🚀Implementation Overview
 
@@ -473,7 +472,7 @@ This section outlines the repository’s directory structure to help you navigat
 
 ## 💻➡️🟢Deploy Infrastructure and Application
 
-### 🐳☸️☸Local Testing (Kubernetes)
+### 🐳☸Local Testing (Kubernetes)
 1. Start a local Kubernetes cluster (e.g., Docker Desktop):
    ```bash
    kubectl cluster-info
@@ -572,9 +571,9 @@ Infrastructure is managed in the `terraform/` folder:
   - Check security group allows EKS access (port 3306 for MySQL, 5432 for PostgreSQL).
 
 > [!IMPORTANT]
-> **Ethereum Testnet**: Uses Infura for blockchain data.
-- **CI/CD**: Jenkins pipeline builds/pushes images to ECR and deploys to EKS.
-- **Health Checks**: Ensure probes are configured per service.
-- **Region**: `eu-central-1`.
+> - **Ethereum Testnet**: Uses Infura for blockchain data.
+> - **CI/CD**: Jenkins pipeline builds/pushes images to ECR and deploys to EKS.
+> - **Health Checks**: Ensure probes are configured per service.
+> - **Region**: `eu-central-1`.
 
 For issues, check Terraform Cloud logs or review `kubectl` outputs.
