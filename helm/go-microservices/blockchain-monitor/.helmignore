@@ -1,0 +1,9 @@
+.DS_Store
+.git/
+.gitignore
+*.swp
+*.bak
+*.tmp
+secrets/
+*.key
+values-prod.yaml

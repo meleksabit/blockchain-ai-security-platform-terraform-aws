@@ -1,0 +1,8 @@
+# -----------------------------------------------------------------------------------
+# This file contains the variables that are used in the terraform configuration files
+# -----------------------------------------------------------------------------------
+
+subnet_ids      = []
+cluster_name    = "blockchain-eks"
+cluster_version = "1.32"
+eks_nodes_sg_id = ""
