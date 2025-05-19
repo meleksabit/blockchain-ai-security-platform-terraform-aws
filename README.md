@@ -398,22 +398,22 @@ Obtain an Infura API key by creating an account at <b><i>[infura.io](https://inf
 To configure the network:
 
   1. **Set the NETWORK environment variable**:
-    - For local testing:
+      - For local testing:
       ```bash
       export NETWORK=<mainnet|sepolia|holesky|hoodi|local>
       ```
-    - For EKS deployment, update Helm values:
+      - For EKS deployment, update Helm values:
       ```bash
       helm upgrade --install blockchain-monitor ./helm/go-microservices/blockchain-monitor --set env.NETWORK=<mainnet|sepolia|holesky|hoodi|local>
       helm upgrade --install ai-agent ./helm/ai-agent --set env.NETWORK=<mainnet|sepolia|holesky|hoodi|local>
       ```
   2. **Verify network configuration**:
-    - Check the `/health` endpoint for each service:
+      - Check the `/health` endpoint for each service:
       ```bash
       curl http://<blockchain-monitor-load-balancer>:8081/health
       curl http://<ai-agent-load-balancer>:8000/health
       ```
-    - Ensure the `network` field matches the configured value.
+      - Ensure the `network` field matches the configured value.
 
 4. **IAM Role (`TerraformCloudRole`)**:
    - Ensure trust policy allows Terraform Cloud user:
