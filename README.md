@@ -395,7 +395,7 @@ Obtain an Infura API key by creating an account at <b><i>[infura.io](https://inf
 </tr>
 </table>
 
-To configure the network:
+### To configure the network:
 
   1. **Set the NETWORK environment variable**:
       - For local testing:
