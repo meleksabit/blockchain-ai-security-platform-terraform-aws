@@ -378,10 +378,10 @@ This section outlines the repository’s directory structure to help you navigat
 3. **Configure Blockchain Network**:
 Set the blockchain network for the `blockchain-monitor` and `ai-agent` services using the `NETWORK` environment variable. Supported networks are:
 
-- **mainnet**: Ethereum mainnet (production, requires Infura API key with mainnet access).
-- **sepolia**: Sepolia testnet (default, recommended for testing).
-- **holesky**: Holesky testnet (alternative testnet for validator and staking tests).
-- **hoodi**: Hoodi testnet (new testnet for Pectra upgrade testing).
+- **Mainnet**: Ethereum Mainnet (production, requires Infura API key with Mainnet access).
+- **Sepolia**: Sepolia testnet (default, recommended for testing).
+- **Holesky**: Holesky testnet (alternative testnet for validator and staking tests).
+- **Hoodi**: Hoodi testnet (new testnet for Pectra upgrade testing).
 - **local**: Local Ethereum node (e.g., Hardhat, Ganache) for development.
 
 <table>
@@ -390,7 +390,7 @@ Set the blockchain network for the `blockchain-monitor` and `ai-agent` services 
 </tr>
 <tr>
 <td>
-Obtain an Infura API key by creating an account at <a href="https://infura.io">infura.io</a> (<font color="red"><b><i>MetaMask wallet login supported</i></b></font>). Avoid using MetaMask’s default Infura key due to rate limits, as it is shared and heavily restricted. Using mainnet incurs <font color="red"><b><i>higher Infura API costs</i></b></font> and interacts with <font color="red"><b><i>real</i></b></font> Ethereum transactions. Ensure your Infura API key supports mainnet and testnet access and use <font color="red"><b><i>cautiously</i></b></font> in production environments.
+Obtain an Infura API key by creating an account at <a href="https://infura.io">infura.io</a> (<font color="red"><b><i>MetaMask wallet login supported</i></b></font>). Avoid using MetaMask’s default Infura key due to rate limits, as it is shared and heavily restricted. Using Mainnet incurs <font color="red"><b><i>higher Infura API costs</i></b></font> and interacts with <font color="red"><b><i>real</i></b></font> Ethereum transactions. Ensure your Infura API key supports Mainnet and testnet access and use <font color="red"><b><i>cautiously</i></b></font> in production environments.
 </td>
 </tr>
 </table>
@@ -613,7 +613,7 @@ Infrastructure is managed in the `terraform/` folder:
   - Check security group allows EKS access (port 3306 for MySQL, 5432 for PostgreSQL).
 
 > [!IMPORTANT]
-> - **Ethereum Networks**: Supports `mainnet`, `Sepolia` (default), `Holesky`, `Hoodi`, and `local` networks. Set `NETWORK` environment variable to configure (see **Setup > Configure Blockchain Network**).
+> - **Ethereum Networks**: Supports `Mainnet`, `Sepolia` (default), `Holesky`, `Hoodi`, and `local` networks. Set `NETWORK` environment variable to configure (see **Setup > Configure Blockchain Network**).
 > - **CI/CD**: Jenkins pipeline builds/pushes images to ECR and deploys to EKS.
 > - **Health Checks**: Ensure probes are configured per service.
 > - **Region**: `eu-central-1` (Frankfurt) is the default region for all AWS resources (EKS, RDS, S3, Secrets Manager). To use a different region, update AWS_DEFAULT_REGION in Terraform Cloud variables or terraform/backend.tf. Ensure consistency across resources to avoid cross-region latency or costs.
