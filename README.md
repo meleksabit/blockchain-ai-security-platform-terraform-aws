@@ -375,7 +375,47 @@ This section outlines the repository’s directory structure to help you navigat
          ```
      - For more details, see the AWS Secrets Manager documentation: https://docs.aws.amazon.com/secretsmanager/latest/userguide/intro.html.
 
-3. **IAM Role (`TerraformCloudRole`)**:
+3. **Configure Blockchain Network**:
+Set the blockchain network for the `blockchain-monitor` and `ai-agent` services using the `NETWORK` environment variable. Supported networks are:
+
+- **mainnet**: Ethereum mainnet (production, requires Infura API key with mainnet access).
+- **sepolia**: Sepolia testnet (default, recommended for testing).
+- **holesky**: Holesky testnet (alternative testnet for validator and staking tests).
+- **hoodi**: Hoodi testnet (new testnet for Pectra upgrade testing).
+- **local**: Local Ethereum node (e.g., Hardhat, Ganache) for development.
+
+<table>
+<tr>
+<th>⚠️ⓘ❗ <b>NOTE</b></th>
+</tr>
+<tr>
+<td width="33%"">
+Obtain an Infura API key by creating an account at <b><i>[infura.io](https://infura.io) (MetaMask wallet login supported)</b></i>. Avoid using MetaMask’s default Infura key due to rate limits, as it is shared and heavily restricted. Using mainnet incurs <b><i>higher Infura API costs</b></i> and interacts with <b><i>real</b></i> Ethereum transactions. Ensure your Infura API key supports mainnet and testnet access and use <b><i>cautiously</b></i> in production environments.
+</td>
+</tr>
+</table>
+
+### To configure the network:
+
+  1. **Set the NETWORK environment variable**:
+      - For local testing:
+      ```bash
+      export NETWORK=<mainnet|sepolia|holesky|hoodi|local>
+      ```
+      - For EKS deployment, update Helm values:
+      ```bash
+      helm upgrade --install blockchain-monitor ./helm/go-microservices/blockchain-monitor --set env.NETWORK=<mainnet|sepolia|holesky|hoodi|local>
+      helm upgrade --install ai-agent ./helm/ai-agent --set env.NETWORK=<mainnet|sepolia|holesky|hoodi|local>
+      ```
+  2. **Verify network configuration**:
+      - Check the `/health` endpoint for each service:
+      ```bash
+      curl http://<blockchain-monitor-load-balancer>:8081/health
+      curl http://<ai-agent-load-balancer>:8000/health
+      ```
+      - Ensure the `network` field matches the configured value.
+
+4. **IAM Role (`TerraformCloudRole`)**:
    - Ensure trust policy allows Terraform Cloud user:
      ```json
      {
@@ -391,7 +431,7 @@ This section outlines the repository’s directory structure to help you navigat
      ```
    - Permissions: EKS, EC2, ELB, ECR, IAM, S3, RDS.
 
-4. **Optimize Uploads**:
+5. **Optimize Uploads**:
    - To optimize uploads in Terraform Cloud, it’s recommended to create a `.terraformignore` file in the project root to exclude unnecessary files, reducing upload size and speeding up Terraform runs. Create the file with the following content:
      ```hcl
       # .terraformignore
@@ -573,7 +613,7 @@ Infrastructure is managed in the `terraform/` folder:
   - Check security group allows EKS access (port 3306 for MySQL, 5432 for PostgreSQL).
 
 > [!IMPORTANT]
-> - **Ethereum Testnet**: Uses Infura for blockchain data.
+> - **Ethereum Networks**: Supports `mainnet`, `Sepolia` (default), `Holesky`, `Hoodi`, and `local` networks. Set `NETWORK` environment variable to configure (see **Setup > Configure Blockchain Network**).
 > - **CI/CD**: Jenkins pipeline builds/pushes images to ECR and deploys to EKS.
 > - **Health Checks**: Ensure probes are configured per service.
 > - **Region**: `eu-central-1` (Frankfurt) is the default region for all AWS resources (EKS, RDS, S3, Secrets Manager). To use a different region, update AWS_DEFAULT_REGION in Terraform Cloud variables or terraform/backend.tf. Ensure consistency across resources to avoid cross-region latency or costs.
