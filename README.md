@@ -384,8 +384,9 @@ Set the blockchain network for the `blockchain-monitor` and `ai-agent` services 
 - **hoodi**: Hoodi testnet (new testnet for Pectra upgrade testing).
 - **local**: Local Ethereum node (e.g., Hardhat, Ganache) for development.
 
-> [!CAUTION]
-> Obtain an Infura API key by creating an account at [infura.io](https://infura.io) (***MetaMask wallet login supported***). Avoid using MetaMask’s default Infura key due to rate limits, as it is shared and heavily restricted. Using mainnet incurs ***higher Infura API costs*** and interacts with ***real*** Ethereum transactions. Ensure your Infura API key supports mainnet and testnet access and use ***cautiously*** in production environments.
+| ⚠️ⓘ❗ **NOTE** |
+|---------------|
+| Obtain an Infura API key by creating an account at [infura.io](https://infura.io) (<b style="color:red"><i>MetaMask wallet login supported</i></b>). Avoid using MetaMask’s default Infura key due to rate limits, as it is shared and heavily restricted. Using mainnet incurs <b style="color:red"><i>higher Infura API costs</i></b> and interacts with <b style="color:red"><i>real</i></b> Ethereum transactions. Ensure your Infura API key supports mainnet and testnet access and use <b style="color:red"><i>cautiously</i></b> in production environments. |
 
 ### To configure the network:
 
