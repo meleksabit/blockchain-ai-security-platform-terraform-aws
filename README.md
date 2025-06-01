@@ -1,4 +1,4 @@
-# $\color{Goldenrod}{₿lockchain\ AI\ Security\ Platform\}$
+# <span class="goldenrod-text">₿lockchain AI Security Platform</span>
 
 [![PR Title Check](https://github.com/meleksabit/blockchain-ai-security-platform-terraform-aws/actions/workflows/pr-title-linter.yml/badge.svg)](https://github.com/meleksabit/blockchain-ai-security-platform-terraform-aws/actions/workflows/pr-title-linter.yml) [![GitHub Release](https://img.shields.io/github/v/release/meleksabit/blockchain-ai-security-platform-terraform-aws)](https://github.com/meleksabit/blockchain-ai-security-platform-terraform-aws/releases)
 
