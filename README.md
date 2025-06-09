@@ -1,4 +1,8 @@
-# ![Platform](https://img.shields.io/badge/₿lockchain_AI_Security-Goldenrod?style=flat&logo=bitcoin)
+<p align="center">
+  <img src="ETH_Security.png" width="533"/>
+</p>
+
+![Platform](https://img.shields.io/badge/₿lockchain_AI_Security-Goldenrod?style=flat&logo=bitcoin)
 
 
 [![PR Title Check](https://github.com/meleksabit/blockchain-ai-security-platform-terraform-aws/actions/workflows/pr-title-linter.yml/badge.svg)](https://github.com/meleksabit/blockchain-ai-security-platform-terraform-aws/actions/workflows/pr-title-linter.yml) [![GitHub Release](https://img.shields.io/github/v/release/meleksabit/blockchain-ai-security-platform-terraform-aws)](https://github.com/meleksabit/blockchain-ai-security-platform-terraform-aws/releases)
