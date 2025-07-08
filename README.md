@@ -81,7 +81,7 @@
 
 ## 📝✅Prerequisites
 
-1. <img height="32" width="32" src="https://cdn.simpleicons.org/amazonwebservices" /> **AWS Account**:
+1. <img width="50" src="https://raw.githubusercontent.com/marwin1991/profile-technology-icons/refs/heads/main/icons/aws.png" alt="AWS" title="AWS"/> **AWS Account**:
    - Active account with IAM user access keys (EKS, EC2, ELB, ECR, IAM, S3, RDS permissions).
    - Region: `eu-central-1`.
 
