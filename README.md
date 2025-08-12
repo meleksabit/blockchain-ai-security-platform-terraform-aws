@@ -37,7 +37,7 @@
 - **Components**:
   - <img width="33" src="https://raw.githubusercontent.com/marwin1991/profile-technology-icons/refs/heads/main/icons/python.png" alt="Python" title="Python"/> **AI Agent**: Core anomaly detection service (port 8000).
 <p align="center">
-  <img src="Screenshot 2025-07-15 183315.png" width="533"/>
+  <img src="Screenshot 2025-07-15 183315.png" width="733"/>
 </p>
   - <img height="32" width="32" src="https://cdn.simpleicons.org/go" /> **Go Microservices**:
     - `blockchain-monitor`: Tracks transactions (port 8081).
@@ -424,7 +424,7 @@ Obtain an Infura API key by creating an account at <a href="https://infura.io">i
       ```
 
 <p align="center">
-  <img src="Screenshot 2025-07-12 215045.png" width="533"/>
+  <img src="Screenshot 2025-07-12 215045.png" width="733"/>
 </p>
 
       - Ensure the `network` field matches the configured value.
@@ -592,7 +592,7 @@ Obtain an Infura API key by creating an account at <a href="https://infura.io">i
    - Use the LoadBalancer URL (port 8083).
 
 <p align="center">
-  <img src="Screenshot 2025-07-12 192906.png" width="533"/>
+  <img src="Screenshot 2025-07-12 192906.png" width="733"/>
 </p>
 
 ## 🏗️🧱📐Infrastructure Details
