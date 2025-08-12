@@ -36,6 +36,9 @@
   - **AWS**: Deployed via Terraform Cloud.
 - **Components**:
   - <img width="33" src="https://raw.githubusercontent.com/marwin1991/profile-technology-icons/refs/heads/main/icons/python.png" alt="Python" title="Python"/> **AI Agent**: Core anomaly detection service (port 8000).
+<p align="center">
+  <img src="Screenshot 2025-07-15 183315.png" width="533"/>
+</p>
   - <img height="32" width="32" src="https://cdn.simpleicons.org/go" /> **Go Microservices**:
     - `blockchain-monitor`: Tracks transactions (port 8081).
     - `anomaly-detector`: Analyzes anomalies (port 8082).
@@ -419,6 +422,11 @@ Obtain an Infura API key by creating an account at <a href="https://infura.io">i
       curl http://<blockchain-monitor-load-balancer>:8081/health
       curl http://<ai-agent-load-balancer>:8000/health
       ```
+
+<p align="center">
+  <img src="Screenshot 2025-07-12 215045.png" width="533"/>
+</p>
+
       - Ensure the `network` field matches the configured value.
 
 4. **IAM Role (`TerraformCloudRole`)**:
@@ -582,6 +590,10 @@ Obtain an Infura API key by creating an account at <a href="https://infura.io">i
    kubectl get svc dashboard --namespace default
    ```
    - Use the LoadBalancer URL (port 8083).
+
+<p align="center">
+  <img src="Screenshot 2025-07-12 192906.png" width="533"/>
+</p>
 
 ## 🏗️🧱📐Infrastructure Details
 Infrastructure is managed in the `terraform/` folder:
