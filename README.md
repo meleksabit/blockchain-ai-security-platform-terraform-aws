@@ -425,7 +425,7 @@ Obtain an Infura API key by creating an account at <a href="https://infura.io">i
       ```
 
 <p align="center">
-  <img src="Screenshot 2025-07-12 215045.png" width="733"/>
+  <img src="Screenshot 2025-07-12 215045.png" width="533"/>
 </p>
 
       - Ensure the `network` field matches the configured value.
