@@ -1,16 +1,16 @@
 apiVersion: v1
 kind: Service
 metadata:
-  name: anomaly-detector-svc
+  name: {{ .Release.Name }}-anomaly-detector
+  namespace: {{ .Values.network.namespace }}
   labels:
-    app: anomaly-detector
+    app: {{ .Values.network.labels.app }}
 spec:
+  type: {{ .Values.service.type }}
   ports:
   - port: {{ .Values.service.port }}
-    targetPort: {{ .Values.service.port }}
+    targetPort: {{ .Values.service.targetPort }}
     protocol: TCP
     name: http
   selector:
-    app: anomaly-detector
-  type: {{ .Values.service.type | default "ClusterIP" }}
-  
+    app: {{ .Values.network.labels.app }}

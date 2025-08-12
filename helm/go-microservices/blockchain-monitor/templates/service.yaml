@@ -1,16 +1,17 @@
 apiVersion: v1
 kind: Service
 metadata:
-  name: blockchain-monitor-svc
+  name: {{ .Release.Name }}-blockchain-monitor
+  namespace: {{ .Values.network.namespace }}
   labels:
-    app: blockchain-monitor
+    app: {{ .Values.network.labels.app }}
 spec:
+  type: {{ .Values.service.type }}
   ports:
   - port: {{ .Values.service.port }}
-    targetPort: {{ .Values.service.port }}
+    targetPort: {{ .Values.service.targetPort }}
     protocol: TCP
     name: http
   selector:
-    app: blockchain-monitor
-  type: {{ .Values.service.type | default "ClusterIP" }}
-  
+    app: {{ .Values.network.labels.app }}
+    
