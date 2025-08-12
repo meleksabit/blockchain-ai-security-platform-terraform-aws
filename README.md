@@ -424,7 +424,7 @@ Obtain an Infura API key by creating an account at <a href="https://infura.io">i
       ```
 
 <p align="center">
-  <img src="Screenshot 2025-07-12 215045.png" width="533"/>
+  <img src="Screenshot 2025-07-12 215045.png" width="733"/>
 </p>
 
       - Ensure the `network` field matches the configured value.
@@ -592,7 +592,7 @@ Obtain an Infura API key by creating an account at <a href="https://infura.io">i
    - Use the LoadBalancer URL (port 8083).
 
 <p align="center">
-  <img src="Screenshot 2025-07-12 192906.png" width="533"/>
+  <img src="Screenshot 2025-07-12 192906.png" width="733"/>
 </p>
 
 ## 🏗️🧱📐Infrastructure Details
