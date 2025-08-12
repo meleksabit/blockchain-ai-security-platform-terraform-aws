@@ -1,26 +1,40 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: {{ .Release.Name }}-deployment
+  name: {{ .Release.Name }}-ai-agent
+  namespace: {{ .Values.network.namespace }}
+  labels:
+    app: {{ .Values.network.labels.app }}
 spec:
   replicas: {{ .Values.replicaCount }}
   selector:
     matchLabels:
-      app: {{ .Release.Name }}
+      app: {{ .Values.network.labels.app }}
   template:
     metadata:
       labels:
-        app: {{ .Release.Name }}
+        app: {{ .Values.network.labels.app }}
     spec:
-      serviceAccountName: {{ .Release.Name }}-sa
       containers:
       - name: ai-agent
         image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
+        ports:
+        - containerPort: 8000
         env:
         - name: NETWORK
-          value: {{ .Values.env[0].value }}
+          value: "{{ .Values.env[0].value }}"
+        - name: VAULT_ADDR
+          value: "{{ .Values.env[1].value }}"
         - name: VAULT_AUTH_TOKEN
           valueFrom:
             secretKeyRef:
-              name: vault-token
-              key: token
+              name: "{{ .Values.env[2].valueFrom.secretKeyRef.name }}"
+              key: "{{ .Values.env[2].valueFrom.secretKeyRef.key }}"
+        command: ["sh", "-c", "sleep 15 && gunicorn -k uvicorn.workers.UvicornWorker ai_agent:app"]
+        livenessProbe:
+          httpGet:
+            path: /health
+            port: 8000
+          initialDelaySeconds: 20
+          periodSeconds: 10
+          

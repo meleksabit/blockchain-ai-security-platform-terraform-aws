@@ -18,7 +18,7 @@ from requests.exceptions import HTTPError
 class RedactingFormatter(logging.Formatter):
     def format(self, record):
         msg = super().format(record)
-        infura_key = os.environ.get("INFURA_API_KEY", "unknown")  # Check every time
+        infura_key = os.environ.get("INFURA_API_KEY", "unknown")
         return re.sub(rf"https://(sepolia|ropsten)\.infura\.io/v3/{infura_key}", "https://[network].infura.io/v3/[REDACTED]", msg)
 
 # Configure Logging
@@ -38,6 +38,8 @@ NETWORK = os.environ.get("NETWORK", "sepolia")
 class AIModel:
     instance = None
     model_loaded = False
+    tokenizer = None
+    model = None
 
     @classmethod
     def get_instance(cls):
@@ -45,25 +47,28 @@ class AIModel:
             cls.instance = cls()
         return cls.instance
 
-    def __init__(self):
-        pass
-
     async def load_model(self):
         cache_dir = "./model_cache"
         try:
-            logger.info("Loading AI Model in background...")
-            self.tokenizer = AutoTokenizer.from_pretrained("cardiffnlp/twitter-roberta-base-sentiment", cache_dir=cache_dir)
-            self.model = AutoModelForSequenceClassification.from_pretrained("cardiffnlp/twitter-roberta-base-sentiment", cache_dir=cache_dir)
+            logger.info("🏁Starting AI model loading at %s", time.ctime())
+            start_time = time.time()
+            # Check if cache exists and contains config.json
+            cache_path = os.path.join(cache_dir, "config.json")
+            local_only = os.path.exists(cache_path)
+            self.tokenizer = AutoTokenizer.from_pretrained("cardiffnlp/twitter-roberta-base-sentiment", cache_dir=cache_dir, local_files_only=local_only)
+            self.model = AutoModelForSequenceClassification.from_pretrained("cardiffnlp/twitter-roberta-base-sentiment", cache_dir=cache_dir, local_files_only=local_only)
+            load_duration = time.time() - start_time
             self.model_loaded = True
-            logger.info("AI Model Loaded Successfully!")
+            logger.info("⏳⌛AI model loaded in %.2f seconds", load_duration)
+            logger.info("🚀AI Model Loaded Successfully!✅")
         except Exception as e:
-            logger.error(f"Error loading AI model: {e}")
+            logger.error(f"🚧 ⚠️Error loading AI model: {e}⚠️ 🚧")
             self.model_loaded = False
             raise
 
     def analyze(self, tx_data, web3):
         if not self.model_loaded:
-            raise RuntimeError("AI Model not loaded yet")
+            raise RuntimeError("⌛AI Model not loaded yet⏳")
         text = f"TX: {tx_data['from']} -> {tx_data['to']}, Amount: {web3.from_wei(tx_data['value'], 'ether')} ETH, Gas: {tx_data['gas']}"
         inputs = self.tokenizer(text, return_tensors="pt", padding=True, truncation=True, max_length=512)
         with torch.no_grad():
@@ -73,19 +78,19 @@ class AIModel:
         if tx_data["value"] > historical_avg_value * 5:
             anomaly_score += 0.2
         if anomaly_score > 0.7:
-            return f"High Anomaly Score: {anomaly_score:.2f} -> Potential Risk!"
+            return f"/̵͇̿̿/’̿’̿ ̿ ̿̿ ̿̿ ̿̿💥High Anomaly Score: {anomaly_score:.2f} -> Potential Risk!☣️☢️"
         elif anomaly_score > 0.5:
-            return f"Medium Anomaly Score: {anomaly_score:.2f} -> Needs Review"
+            return f" 🕵️ Medium Anomaly Score: {anomaly_score:.2f} -> Needs Review👀"
         else:
-            return f"Normal Transaction (Score: {anomaly_score:.2f})"
+            return f"👌Normal Transaction (Score: {anomaly_score:.2f})"
 
 # Ensure hf_xet is installed
 def ensure_hf_xet():
     try:
         import hf_xet
-        logger.info("hf_xet package is already installed")
+        logger.info("📦hf_xet package is already installed✅")
     except ImportError:
-        logger.warning("hf_xet not installed in image, expected pre-installation. Falling back to HTTP download.")
+        logger.warning("🚨hf_xet not installed in image, expected pre-installation. Falling back to HTTP download.⚠️")
 
 # Health endpoint
 @app.get("/health")
@@ -93,17 +98,15 @@ async def health_check():
     try:
         web3 = connect_web3()
         ai_model = AIModel.get_instance()
-        return {
-            "status": "healthy" if ai_model.model_loaded else "starting",
-            "web3_connected": web3.is_connected(),
-            "model_loaded": ai_model.model_loaded,
-            "network": NETWORK
-        }
+        if ai_model.model_loaded:
+            return {"status": "🌾💚healthy", "web3_connected": web3.is_connected(), "model_loaded": True, "network": NETWORK}
+        else:
+            return {"status": "⏳⌛loading", "web3_connected": web3.is_connected(), "model_loaded": False, "network": NETWORK}, 200
     except HTTPException as e:
         raise e
     except Exception as e:
-        logger.error(f"Health check failed: {e}")
-        return {"status": "unhealthy", "error": "Health check failed due to an internal error"}
+        logger.error(f"⚠️👎Health check failed: {e}")
+        return {"ـــــــــــــــﮩ٨ـ❤️️status": "☣️☠️unhealthy", "⚠️error⚠️": str(e)}, 503
 
 # Vault client setup
 @lru_cache(maxsize=1)
@@ -113,7 +116,7 @@ def get_vault_client():
     client.token = os.environ.get("VAULT_AUTH_TOKEN")
     if not client.is_authenticated():
         raise Exception("Vault authentication failed")
-    logger.info("Vault client authenticated successfully")
+    logger.info("🔐Vault client authenticated successfully✅")
     return client
 
 # Secrets retrieval
@@ -124,13 +127,13 @@ def get_infura_key():
         secret = client.secrets.kv.v2.read_secret_version(path="infura", mount_point="secret")
         api_key = secret["data"]["data"]["api_key"]
         if api_key.startswith("https://"):
-            logger.warning("Infura key from Vault appears to be a full URL - extracting key")
+            logger.warning("⚠︎ ⚡︎Infura key from Vault appears to be a full URL - extracting key")
             api_key = api_key.split("/")[-1]
         os.environ["INFURA_API_KEY"] = api_key
-        logger.info("Infura key retrieved from Vault")
+        logger.info("🔑Infura key retrieved from Vault✅")
         return api_key
     except Exception as e:
-        logger.error(f"Vault Infura Error: {e}")
+        logger.error(f"⛔Vault Infura Error: {e}")
         raise
 
 @retry(
@@ -145,22 +148,22 @@ def connect_web3(network=NETWORK):
         infura_key = get_infura_key()
         url = f"https://{network}.infura.io/v3/{infura_key}"
     else:
-        logger.error(f"Unsupported network: {network}")
-        raise ValueError(f"Unsupported network: {network}")
+        logger.error(f"💀💻Unsupported network: {network}")
+        raise ValueError(f"💀💻Unsupported network: {network}")
     
     try:
         web3 = Web3(Web3.HTTPProvider(url))
         connected = web3.is_connected()
         if not connected:
-            logger.error(f"Web3 connection failed - {network} not reachable (key redacted)")
+            logger.error(f"🔗💔Web3 connection failed - {network} not reachable (key redacted)")
             raise HTTPException(status_code=503, detail=f"Failed to connect to {network}")
-        logger.info(f"Connected to {network} blockchain!")
+        logger.info(f"🔗Connected to {network} blockchain!✅")
         return web3
     except HTTPError as e:
-        logger.error(f"HTTP error connecting to {network}: {e} (key redacted)")
+        logger.error(f"🌐❌HTTP error connecting to {network}: {e} (key redacted)")
         raise
     except Exception as e:
-        logger.error(f"Web3 connection error for {network}: {e} (key redacted)")
+        logger.error(f"🌐🔗⛓️Web3 connection error for {network}: {e} (key redacted)")
         raise HTTPException(status_code=503, detail=f"{network} connection unavailable")
 
 # Block caching
@@ -171,11 +174,11 @@ def get_latest_block_data(web3):
     current_time = time.time()
     latest_block = web3.eth.block_number
     if latest_block in block_cache and (current_time - block_cache[latest_block]["timestamp"]) < CACHE_TTL:
-        logger.info(f"Using cached block {latest_block}")
+        logger.info(f"🧹🔗Using cached block {latest_block}")
         return block_cache[latest_block]["data"]
     block_data = web3.eth.get_block(latest_block, full_transactions=True)
     block_cache[latest_block] = {"data": block_data, "timestamp": current_time}
-    logger.info(f"Fetched new block {latest_block}")
+    logger.info(f"🐕🦴Fetched new block {latest_block}")
     return block_data
 
 # Historical data
@@ -185,10 +188,10 @@ async def fetch_historical_blocks(web3, start_block, num_blocks):
         try:
             block = web3.eth.get_block(block_num, full_transactions=True)
             historical_data.append(block)
-            logger.info(f"Fetched historical block {block_num}")
+            logger.info(f"📜🏛️🏺Fetched historical block {block_num}")
             await asyncio.sleep(1)  # Avoid rate limits
         except HTTPError as e:
-            logger.error(f"Infura rate limit hit: {e}")
+            logger.error(f"🛑✋Infura rate limit hit: {e}")
             break
     return historical_data
 
@@ -208,12 +211,12 @@ async def analyze_transaction(tx: Transaction):
         tx_data = {"from": tx.from_address, "to": tx.to_address, "value": int(tx.value), "gas": tx.gas}
         ai_model = AIModel.get_instance()
         result = ai_model.analyze(tx_data, web3)
-        logger.info(f"Transaction analyzed: {tx.from_address} -> {tx.to_address} | {result}")
+        logger.info(f"🧐Transaction analyzed: {tx.from_address} -> {tx.to_address} | {result}")
         return {"result": result}
     except HTTPException as e:
         raise e
     except Exception as e:
-        logger.error(f"Analyze failed: {e}")
+        logger.error(f"❌📉Analyze failed: {e}")
         raise HTTPException(status_code=500, detail="Internal server error during analysis")
 
 @app.on_event("startup")
@@ -222,20 +225,22 @@ async def startup_event():
         ensure_hf_xet()  # Ensure hf_xet is installed
         web3 = connect_web3()
         ai_model = AIModel.get_instance()
-        logger.info("Starting blockchain polling and historical fetch in background")
+        logger.info("1️⃣🚀Initiating ai-agent service")
+        asyncio.create_task(ai_model.load_model())  # Load model in background
+        logger.info("֎🇦🇮 ai-agent service ready")
+        logger.info("🏁Starting blockchain polling and historical fetch in background")
         asyncio.create_task(poll_blockchain(web3))
         asyncio.create_task(fetch_historical_blocks(web3, web3.eth.block_number - 1000, 1000))
-        asyncio.create_task(ai_model.load_model())  # Load model in background
-        logger.info("Startup tasks scheduled")
+        logger.info("🕘🗓️Startup tasks scheduled")
     except HTTPException as e:
-        logger.error(f"Startup failed with HTTP exception: {e.detail}")
+        logger.error(f"🔴Startup failed with HTTP exception: {e.detail}")
     except Exception as e:
-        logger.error(f"Startup failed: {e}")
+        logger.error(f"🔴Startup failed: {e}")
 
 async def poll_blockchain(web3):
     ai_model = AIModel.get_instance()
     while not ai_model.model_loaded:
-        logger.info("Waiting for AI model to load before polling...")
+        logger.info("...⏳Waiting for AI model to load before polling...")
         await asyncio.sleep(5)
     while True:
         try:
@@ -243,9 +248,9 @@ async def poll_blockchain(web3):
             for tx in block_data["transactions"]:
                 result = ai_model.analyze(tx, web3)
                 if "High" in result or "Medium" in result:
-                    logger.warning(f"Anomaly detected in block {block_data['number']}: {result}")
+                    logger.warning(f"/̵͇̿̿/’̿’̿ ̿ ̿̿ ̿̿ ̿̿💥Anomaly detected in block {block_data['number']}: {result}")
         except Exception as e:
-            logger.error(f"Polling error: {e}")
+            logger.error(f"🔴🗳️Polling error: {e}")
         await asyncio.sleep(10)
 
 if __name__ == "__main__":

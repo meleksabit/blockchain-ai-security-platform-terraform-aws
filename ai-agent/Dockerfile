@@ -12,9 +12,11 @@ COPY --from=builder /usr/local/lib/python3.12/site-packages/ /usr/local/lib/pyth
 COPY --from=builder /usr/local/bin/ /usr/local/bin/
 COPY ai_agent.py .
 RUN useradd -m appuser && \
+    mkdir -p /home/appuser/app/model_cache && \
+    chown -R appuser:appuser /home/appuser/app/model_cache && \
     mkdir -p /home/appuser/.cache && \
-    chown -R appuser:appuser /home/appuser
+    chown -R appuser:appuser /home/appuser/.cache
 USER appuser
 HEALTHCHECK --interval=30s --timeout=3s \
     CMD curl -f http://localhost:8000/health || exit 1
-CMD ["gunicorn", "-k", "uvicorn.workers.UvicornWorker", "-w", "4", "-b", "0.0.0.0:8000", "ai_agent:app"]
+CMD ["gunicorn", "-k", "uvicorn.workers.UvicornWorker", "-w", "1", "-b", "0.0.0.0:8000", "ai_agent:app"]
