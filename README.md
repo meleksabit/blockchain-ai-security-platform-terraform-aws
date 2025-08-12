@@ -8,7 +8,7 @@
   
 [![PR Title Check](https://github.com/meleksabit/blockchain-ai-security-platform-terraform-aws/actions/workflows/pr-title-linter.yml/badge.svg)](https://github.com/meleksabit/blockchain-ai-security-platform-terraform-aws/actions/workflows/pr-title-linter.yml) [![GitHub Release](https://img.shields.io/github/v/release/meleksabit/blockchain-ai-security-platform-terraform-aws)](https://github.com/meleksabit/blockchain-ai-security-platform-terraform-aws/releases)
 
-### An ֎🇦🇮-powered security platform for detecting anomalies in blockchain transactions, built with Terraform <img width="50" src="https://raw.githubusercontent.com/marwin1991/profile-technology-icons/refs/heads/main/icons/terraform.png" alt="Terraform" title="Terraform"/> for AWS <img width="50" src="https://raw.githubusercontent.com/marwin1991/profile-technology-icons/refs/heads/main/icons/aws.png" alt="AWS" title="AWS"/> infrastructure, Helm <img height="32" width="32" src="https://cdn.simpleicons.org/helm" /> for Kubernetes <img height="32" width="32" src="https://cdn.simpleicons.org/kubernetes" /> deployments, and a CI/CD <img height="32" width="32" src="https://cdn.simpleicons.org/jenkins" /> pipeline. The platform integrates AI agents <img height="32" width="32" src="https://cdn.simpleicons.org/openai" />, Go <img width="50" src="https://raw.githubusercontent.com/marwin1991/profile-technology-icons/refs/heads/main/icons/go.png" alt="Go" title="Go"/> microservices, RDS <img height="32" width="32" src="https://cdn.simpleicons.org/amazonrds" />, and containerized deployments for a robust DevSecOps solution.
+### An ֎🇦🇮-powered security platform for detecting anomalies in blockchain transactions, built with Terraform <img width="50" src="https://raw.githubusercontent.com/marwin1991/profile-technology-icons/refs/heads/main/icons/terraform.png" alt="Terraform" title="Terraform"/> for AWS <img width="50" src="https://raw.githubusercontent.com/marwin1991/profile-technology-icons/refs/heads/main/icons/aws.png" alt="AWS" title="AWS"/> infrastructure, Helm <img height="32" width="32" src="https://cdn.simpleicons.org/helm" /> for Kubernetes <img height="32" width="32" src="https://cdn.simpleicons.org/kubernetes" /> deployments, and a CI/CD <img height="32" width="32" src="https://cdn.simpleicons.org/jenkins" /> pipeline. The platform integrates AI agents <img height="32" width="32" src="https://cdn.simpleicons.org/openai" />, Go <img width="50" src="https://raw.githubusercontent.com/marwin1991/profile-technology-icons/refs/heads/main/icons/go.png" alt="Go" title="Go"/> microservices, RDS, and containerized deployments for a robust DevSecOps solution.
 
 ## Table of Contents
 - [Implementation Overview](#implementation-overview)
@@ -36,6 +36,9 @@
   - **AWS**: Deployed via Terraform Cloud.
 - **Components**:
   - <img width="33" src="https://raw.githubusercontent.com/marwin1991/profile-technology-icons/refs/heads/main/icons/python.png" alt="Python" title="Python"/> **AI Agent**: Core anomaly detection service (port 8000).
+<p align="center">
+  <img src="Screenshot 2025-07-15 183315.png" width="533"/>
+</p>
   - <img height="32" width="32" src="https://cdn.simpleicons.org/go" /> **Go Microservices**:
     - `blockchain-monitor`: Tracks transactions (port 8081).
     - `anomaly-detector`: Analyzes anomalies (port 8082).
@@ -81,7 +84,7 @@
 
 ## 📝✅Prerequisites
 
-1. <img height="32" width="32" src="https://cdn.simpleicons.org/amazonwebservices" /> **AWS Account**:
+1. <img width="50" src="https://raw.githubusercontent.com/marwin1991/profile-technology-icons/refs/heads/main/icons/aws.png" alt="AWS" title="AWS"/> **AWS Account**:
    - Active account with IAM user access keys (EKS, EC2, ELB, ECR, IAM, S3, RDS permissions).
    - Region: `eu-central-1`.
 
@@ -419,6 +422,11 @@ Obtain an Infura API key by creating an account at <a href="https://infura.io">i
       curl http://<blockchain-monitor-load-balancer>:8081/health
       curl http://<ai-agent-load-balancer>:8000/health
       ```
+
+<p align="center">
+  <img src="Screenshot 2025-07-12 215045.png" width="533"/>
+</p>
+
       - Ensure the `network` field matches the configured value.
 
 4. **IAM Role (`TerraformCloudRole`)**:
@@ -582,6 +590,10 @@ Obtain an Infura API key by creating an account at <a href="https://infura.io">i
    kubectl get svc dashboard --namespace default
    ```
    - Use the LoadBalancer URL (port 8083).
+
+<p align="center">
+  <img src="Screenshot 2025-07-12 192906.png" width="533"/>
+</p>
 
 ## 🏗️🧱📐Infrastructure Details
 Infrastructure is managed in the `terraform/` folder:
