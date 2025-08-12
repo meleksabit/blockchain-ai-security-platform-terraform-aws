@@ -1,68 +1,40 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: {{ .Release.Name }}
+  name: {{ .Release.Name }}-blockchain-monitor
+  namespace: {{ .Values.network.namespace }}
   labels:
-    app: {{ .Release.Name }}
+    app: {{ .Values.network.labels.app }}
 spec:
   replicas: {{ .Values.replicaCount }}
   selector:
     matchLabels:
-      app: {{ .Release.Name }}
+      app: {{ .Values.network.labels.app }}
   template:
     metadata:
       labels:
-        app: {{ .Release.Name }}
+        app: {{ .Values.network.labels.app }}
     spec:
-      serviceAccountName: {{ .Values.serviceAccount.name }}
       containers:
-      - name: {{ .Chart.Name }}
+      - name: blockchain-monitor
         image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
-        imagePullPolicy: {{ .Values.image.pullPolicy }}
+        ports:
+        - containerPort: 8081
         env:
-        {{- range .Values.env }}
-        - name: {{ .name }}
-          {{ if .value }}
-          value: {{ .value | quote }}
-          {{ else if .valueFrom }}
+        - name: NETWORK
+          value: "{{ .Values.env[0].value }}"
+        - name: VAULT_ADDR
+          value: "{{ .Values.env[1].value }}"
+        - name: VAULT_TOKEN
           valueFrom:
             secretKeyRef:
-              name: {{ .valueFrom.secretKeyRef.name }}
-              key: {{ .valueFrom.secretKeyRef.key }}
-          {{ end }}
-        {{- end }}
-        ports:
-        - containerPort: {{ .Values.service.port }}
-        resources:
-          {{ toYaml .Values.resources | nindent 12 }}
-        {{- if .Values.probes.liveness.enabled }}
+              name: "{{ .Values.env[2].valueFrom.secretKeyRef.name }}"
+              key: "{{ .Values.env[2].valueFrom.secretKeyRef.key }}"
+        command: ["sh", "-c", "sleep 15 && ./blockchain-monitor"]
         livenessProbe:
           httpGet:
-            path: {{ .Values.probes.liveness.path }}
-            port: {{ .Values.service.port }}
-          initialDelaySeconds: {{ .Values.probes.liveness.initialDelaySeconds }}
-          periodSeconds: {{ .Values.probes.liveness.periodSeconds }}
-          timeoutSeconds: {{ .Values.probes.liveness.timeoutSeconds }}
-          failureThreshold: {{ .Values.probes.liveness.failureThreshold }}
-        {{- end }}
-        {{- if .Values.probes.readiness.enabled }}
-        readinessProbe:
-          httpGet:
-            path: {{ .Values.probes.readiness.path }}
-            port: {{ .Values.service.port }}
-          initialDelaySeconds: {{ .Values.probes.readiness.initialDelaySeconds }}
-          periodSeconds: {{ .Values.probes.readiness.periodSeconds }}
-          timeoutSeconds: {{ .Values.probes.readiness.timeoutSeconds }}
-          failureThreshold: {{ .Values.probes.readiness.failureThreshold }}
-        {{- end }}
-        {{- if .Values.probes.startup.enabled }}
-        startupProbe:
-          httpGet:
-            path: {{ .Values.probes.startup.path }}
-            port: {{ .Values.service.port }}
-          initialDelaySeconds: {{ .Values.probes.startup.initialDelaySeconds }}
-          periodSeconds: {{ .Values.probes.startup.periodSeconds }}
-          timeoutSeconds: {{ .Values.probes.startup.timeoutSeconds }}
-          failureThreshold: {{ .Values.probes.startup.failureThreshold }}
-        {{- end }}
-        
+            path: /health
+            port: 8081
+          initialDelaySeconds: 20
+          periodSeconds: 10
+          

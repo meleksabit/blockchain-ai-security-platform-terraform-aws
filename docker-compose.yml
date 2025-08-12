@@ -1,11 +1,11 @@
 services:
   vault:
-    image: hashicorp/vault:1.19.0
+    image: hashicorp/vault:1.20.0
     container_name: vault
     ports:
       - "8200:8200"
     environment:
-      - VAULT_DEV_ROOT_TOKEN_ID=myroot
+      - VAULT_DEV_ROOT_TOKEN_ID=${VAULT_TOKEN} # Uses exported VAULT_TOKEN
       - VAULT_DEV_LISTEN_ADDRESS=0.0.0.0:8200
     command: server -dev
     cap_add:
@@ -15,6 +15,8 @@ services:
       interval: 5s
       timeout: 2s
       retries: 10
+    networks:
+      - blockchain-net
 
   blockchain-monitor:
     build:
@@ -26,11 +28,14 @@ services:
     environment:
       - PORT=8081
       - VAULT_ADDR=http://vault:8200
-      - VAULT_TOKEN=myroot
+      - VAULT_TOKEN=${VAULT_TOKEN} # Uses exported VAULT_TOKEN
     depends_on:
       vault:
         condition: service_healthy
     command: "sh -c 'sleep 15 && ./blockchain-monitor'"
+    networks:
+      - blockchain-net
+
   anomaly-detector:
     build:
       context: ./go-services/anomaly-detector
@@ -41,9 +46,11 @@ services:
     environment:
       - PORT=8082
       - VAULT_ADDR=http://vault:8200
-      - VAULT_TOKEN=myroot
+      - VAULT_TOKEN=${VAULT_TOKEN} # Uses exported VAULT_TOKEN
     depends_on:
       - vault
+    networks:
+      - blockchain-net
 
   dashboard:
     build:
@@ -55,9 +62,11 @@ services:
     environment:
       - PORT=8083
       - VAULT_ADDR=http://vault:8200
-      - VAULT_TOKEN=myroot
+      - VAULT_TOKEN=${VAULT_TOKEN} # Uses exported VAULT_TOKEN
     depends_on:
       - vault
+    networks:
+      - blockchain-net
 
   ai-agent:
     build:
@@ -69,8 +78,16 @@ services:
     environment:
       - PORT=8000
       - VAULT_ADDR=http://vault:8200
-      - VAULT_AUTH_TOKEN=myroot
+      - VAULT_AUTH_TOKEN=${VAULT_TOKEN} # Uses exported VAULT_TOKEN
     depends_on:
       vault:
         condition: service_healthy
     command: "sh -c 'sleep 15 && gunicorn -k uvicorn.workers.UvicornWorker ai_agent:app'"
+    volumes:
+      - ./model_cache:/home/appuser/app/model_cache
+    networks:
+      - blockchain-net
+    
+networks:
+  blockchain-net:
+    driver: bridge
