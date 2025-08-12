@@ -5,7 +5,11 @@
 <p align="center">
   <img src="https://img.shields.io/badge/₿lockchain_AI_Security-Goldenrod?style=flat&logo=bitcoin" alt="Platform Badge">
 </p>
-  
+
+<p align="center">
+  <img src="Screenshot 2025-07-15 183315.png" width="733"/>
+</p>
+
 [![PR Title Check](https://github.com/meleksabit/blockchain-ai-security-platform-terraform-aws/actions/workflows/pr-title-linter.yml/badge.svg)](https://github.com/meleksabit/blockchain-ai-security-platform-terraform-aws/actions/workflows/pr-title-linter.yml) [![GitHub Release](https://img.shields.io/github/v/release/meleksabit/blockchain-ai-security-platform-terraform-aws)](https://github.com/meleksabit/blockchain-ai-security-platform-terraform-aws/releases)
 
 ### An ֎🇦🇮-powered security platform for detecting anomalies in blockchain transactions, built with Terraform <img width="50" src="https://raw.githubusercontent.com/marwin1991/profile-technology-icons/refs/heads/main/icons/terraform.png" alt="Terraform" title="Terraform"/> for AWS <img width="50" src="https://raw.githubusercontent.com/marwin1991/profile-technology-icons/refs/heads/main/icons/aws.png" alt="AWS" title="AWS"/> infrastructure, Helm <img height="32" width="32" src="https://cdn.simpleicons.org/helm" /> for Kubernetes <img height="32" width="32" src="https://cdn.simpleicons.org/kubernetes" /> deployments, and a CI/CD <img height="32" width="32" src="https://cdn.simpleicons.org/jenkins" /> pipeline. The platform integrates AI agents <img height="32" width="32" src="https://cdn.simpleicons.org/openai" />, Go <img width="50" src="https://raw.githubusercontent.com/marwin1991/profile-technology-icons/refs/heads/main/icons/go.png" alt="Go" title="Go"/> microservices, RDS, and containerized deployments for a robust DevSecOps solution.
@@ -36,9 +40,6 @@
   - **AWS**: Deployed via Terraform Cloud.
 - **Components**:
   - <img width="33" src="https://raw.githubusercontent.com/marwin1991/profile-technology-icons/refs/heads/main/icons/python.png" alt="Python" title="Python"/> **AI Agent**: Core anomaly detection service (port 8000).
-<p align="center">
-  <img src="Screenshot 2025-07-15 183315.png" width="733"/>
-</p>
   - <img height="32" width="32" src="https://cdn.simpleicons.org/go" /> **Go Microservices**:
     - `blockchain-monitor`: Tracks transactions (port 8081).
     - `anomaly-detector`: Analyzes anomalies (port 8082).
