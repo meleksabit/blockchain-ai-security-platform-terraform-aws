@@ -106,7 +106,7 @@ async def health_check():
         raise e
     except Exception as e:
         logger.error(f"⚠️👎Health check failed: {e}")
-        return {"ـــــــــــــــﮩ٨ـ❤️️status": "☣️☠️unhealthy", "⚠️error⚠️": str(e)}, 503
+        return {"ـــــــــــــــﮩ٨ـ❤️️status": "☣️☠️unhealthy", "⚠️error⚠️": "An internal error has occurred."}, 503
 
 # Vault client setup
 @lru_cache(maxsize=1)
