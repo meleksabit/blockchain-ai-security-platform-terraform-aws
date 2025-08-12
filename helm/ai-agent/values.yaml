@@ -1,14 +1,46 @@
 replicaCount: 2
 image:
   repository: "ai-agent"
+  tag: "latest"
+  pullPolicy: IfNotPresent
 service:
   type: LoadBalancer
   port: 80
+  targetPort: 8000
 env:
   - name: NETWORK
-    value: "local"    # Set to 'sepolia' or 'ropsten' for production
+    value: "local"
+  - name: VAULT_ADDR
+    value: "http://vault:8200"
   - name: VAULT_AUTH_TOKEN
     valueFrom:
       secretKeyRef:
         name: vault-token
         key: token
+network:
+  name: blockchain-net
+  namespace: blockchain-ai-security
+  labels:
+    app: blockchain-ai-security
+vault:
+  enabled: true
+  image:
+    repository: hashicorp/vault
+    tag: "1.20.0"
+    pullPolicy: IfNotPresent
+  ports:
+    - name: http
+      containerPort: 8200
+  env:
+    - name: VAULT_DEV_ROOT_TOKEN_ID
+      valueFrom:
+        secretKeyRef:
+          name: vault-token
+          key: token
+    - name: VAULT_DEV_LISTEN_ADDRESS
+      value: "0.0.0.0:8200"
+  healthCheck:
+    test: ["CMD", "vault", "status", "-address=http://localhost:8200"]
+    interval: 5s
+    timeout: 2s
+    retries: 10

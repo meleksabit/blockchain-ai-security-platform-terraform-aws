@@ -45,6 +45,11 @@ func main() {
 	r := gin.Default()
 	r.LoadHTMLGlob("templates/*")
 
+	// Add health endpoint
+	r.GET("/health", func(c *gin.Context) {
+		c.JSON(http.StatusOK, gin.H{"status": "healthy"})
+	})
+
 	r.GET("/dashboard", func(c *gin.Context) {
 		client := &http.Client{Timeout: 5 * time.Second}
 
